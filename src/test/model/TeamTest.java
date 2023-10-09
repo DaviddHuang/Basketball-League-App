@@ -20,6 +20,14 @@ public class TeamTest {
     }
 
     @Test
+    void testConstructor() {
+        assertEquals("Shanghai Sharks", testTeam.getTeamName());
+        assertEquals(0, testTeam.getWins());
+        assertEquals(0, testTeam.getLosses());
+        assertEquals(0, testTeam.getTeamGamesPlayed());
+    }
+
+    @Test
     void testAddPlayer() {
         testTeam.addPlayer(testPlayer1);
         assertEquals(1, testTeam.getRoster().size());

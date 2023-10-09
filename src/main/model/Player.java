@@ -10,7 +10,7 @@ public class Player {
     private int assists;
     private int gamesPlayed;
 
-    // REQUIRES: 0 <= number <= 99
+    // REQUIRES: 0 <= number <= 99, height >= 0, weight >= 0.00
     // MODIFIES: this
     // EFFECTS: constructs a player with a name and a jersey number, along with their height,
     //          weight, points, rebounds, assists, and games played

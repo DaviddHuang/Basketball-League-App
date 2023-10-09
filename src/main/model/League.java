@@ -21,6 +21,18 @@ public class League {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: removes a team with the given name, return true if removal was successful, otherwise return false
+    public boolean removeTeam(String name) {
+        for (Team t : league) {
+            if (t.getTeamName().equals(name)) {
+                league.remove(t);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String getLeagueName() {
         return name;
     }
