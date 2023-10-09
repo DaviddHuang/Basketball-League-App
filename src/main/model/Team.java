@@ -19,11 +19,16 @@ public class Team {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds a new player to the roster if player is not already in the roster
-    public void addPlayer(Player player) {
-        if (!roster.contains(player)) {
-            roster.add(player);
+    // EFFECTS: adds a new player to the roster, if the player shares the same number as another player don't add
+    //          the player, return true if add is successful and return false otherwise
+    public Boolean addPlayer(Player player) {
+        for (Player p : roster) {
+            if (p.getJerseyNumber() == player.getJerseyNumber()) {
+                return false;
+            }
         }
+        roster.add(player);
+        return false;
     }
 
     // MODIFIES: this

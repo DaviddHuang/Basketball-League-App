@@ -1,5 +1,6 @@
 package model;
 
+// Represents a basketball player with a name, jersey number, height(cm), weight(lbs)
 public class Player {
     private String name;
     private int number;

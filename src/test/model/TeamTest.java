@@ -11,12 +11,14 @@ public class TeamTest {
     private Team testTeam;
     private Player testPlayer1;
     private Player testPlayer2;
+    private Player testPlayer3;
 
     @BeforeEach
     void setup(){
         testTeam = new Team("Shanghai Sharks");
         testPlayer1 = new Player("Lebron James", 23, 195, 230.3);
         testPlayer2 = new Player("Kevin Durant", 35, 202, 201.7);
+        testPlayer3 = new Player("Ducky", 23, 201, 201.9);
     }
 
     @Test
@@ -34,9 +36,9 @@ public class TeamTest {
     }
 
     @Test
-    void testAddPlayerSamePlayer() {
+    void testAddPlayerSameJersey() {
         testTeam.addPlayer(testPlayer1);
-        testTeam.addPlayer(testPlayer1);
+        testTeam.addPlayer(testPlayer3);
         assertEquals(1, testTeam.getRoster().size());
         assertEquals("Lebron James", testTeam.getRoster().get(0).getName());
     }
