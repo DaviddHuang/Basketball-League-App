@@ -50,4 +50,18 @@ public class TeamTest {
         assertTrue(testTeam.getRoster().contains(testPlayer1));
         assertFalse(testTeam.removePlayer("Klay Thompson"));
     }
+
+    @Test
+    void testWinPercentage() {
+        testTeam.matchWin();
+        testTeam.matchLose();
+        testTeam.matchWin();
+        testTeam.matchWin();
+        assertEquals(0.750, testTeam.winPercentage());
+    }
+
+    @Test
+    void testWinPercentageZeroGamesPlayed() {
+        assertEquals(0, testTeam.winPercentage());
+    }
 }
