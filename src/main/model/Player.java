@@ -54,15 +54,15 @@ public class Player {
     }
 
 
-    // REQUIRES: points >= 0, rebounds >= 0, assists >= 0
+    // REQUIRES: points >= 0, rebounds >= 0, assists >= 0, gamesPlayed >= 0
     // MODIFIES: this
-    // REQUIRES: adds points, rebounds, and assists to their respective totals,
+    // REQUIRES: adds points, rebounds, assists and gamesPlayed to their respective totals,
     //           increase the number of games played
-    public void playGame(int points, int rebounds, int assists) {
+    public void playGame(int points, int rebounds, int assists, int gamesPlayed) {
         this.points += points;
         this.rebounds += rebounds;
         this.assists += assists;
-        gamesPlayed++;
+        this.gamesPlayed += gamesPlayed;
     }
 
     // getters
