@@ -39,6 +39,7 @@ public class TeamTest {
     void testAddPlayerSameJersey() {
         testTeam.addPlayer(testPlayer1);
         testTeam.addPlayer(testPlayer3);
+        assertFalse(testTeam.addPlayer(testPlayer3));
         assertEquals(1, testTeam.getRoster().size());
         assertEquals("Lebron James", testTeam.getRoster().get(0).getName());
     }

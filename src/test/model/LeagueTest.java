@@ -39,6 +39,14 @@ public class LeagueTest {
     }
 
     @Test
+    void testAddTeamFail() {
+        testLeague.addTeam(testTeam1);
+        testLeague.addTeam(testTeam1);
+        assertEquals(1, testLeague.getAmountOfTeams());
+        assertTrue(testLeague.getTeams().contains(testTeam1));
+    }
+
+    @Test
     void testRemoveTeam() {
         testLeague.addTeam(testTeam1);
         testLeague.removeTeam("Shanghai Sharks");
