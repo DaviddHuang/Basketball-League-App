@@ -65,6 +65,8 @@ public class Player {
         gamesPlayed++;
     }
 
+    // getters
+
     public String getName() {
         return name;
     }
@@ -87,5 +89,13 @@ public class Player {
 
     public int getGamesPlayed() {
         return gamesPlayed;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }

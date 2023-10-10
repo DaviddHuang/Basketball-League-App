@@ -2,6 +2,8 @@ package model;
 
 import java.util.*;
 
+// Represents a basketball team with a list of players on the time, amount of wins, losses, win percentage, and
+// games played
 public class Team {
     private List<Player> roster;
     private int wins;
@@ -9,6 +11,7 @@ public class Team {
     private int teamGamesPlayed;
     private String name;
 
+    // MODIFIES: this
     // EFFECTS: constructs a team with a name, 0 wins, and an empty roster list
     public Team(String name) {
         this.name = name;
@@ -43,6 +46,7 @@ public class Team {
         return false;
     }
 
+    // EFFECTS: calculates the win percentage of a team
     public double winPercentage() {
         if (teamGamesPlayed == 0) {
             return 0.000;
@@ -64,6 +68,8 @@ public class Team {
         losses++;
         teamGamesPlayed++;
     }
+
+    // getters and setters
 
     public List<Player> getRoster() {
         return this.roster;

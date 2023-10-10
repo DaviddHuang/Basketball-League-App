@@ -15,10 +15,14 @@ public class League {
     // MODIFIES: this
     // EFFECTS: adds team with given name to the league if team is not already in the league, return true if the add
     //          was successful, otherwise return false
-    public void addTeam(Team team) {
-        if (!league.contains(team)) {
-            league.add(team);
+    public boolean addTeam(Team team) {
+        for (Team t : league) {
+            if (t.getTeamName().equals(team.getTeamName())) {
+                return false;
+            }
         }
+        league.add(team);
+        return true;
     }
 
     // MODIFIES: this
