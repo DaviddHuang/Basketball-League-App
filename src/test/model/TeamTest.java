@@ -38,11 +38,19 @@ public class TeamTest {
 
     @Test
     void testAddPlayerSameJersey() {
-        testTeam.addPlayer(testPlayer1);
-        testTeam.addPlayer(testPlayer3);
+        assertTrue(testTeam.addPlayer(testPlayer1));
         assertFalse(testTeam.addPlayer(testPlayer3));
         assertEquals(1, testTeam.getRoster().size());
         assertEquals("Lebron James", testTeam.getRoster().get(0).getName());
+    }
+
+    @Test
+    void testAddPlayerMultiple() {
+        assertTrue(testTeam.addPlayer(testPlayer1));
+        assertTrue(testTeam.addPlayer(testPlayer2));
+        assertEquals(2, testTeam.getRoster().size());
+        assertTrue(testTeam.getRoster().contains(testPlayer1));
+        assertTrue(testTeam.getRoster().contains(testPlayer2));
     }
 
     @Test
@@ -60,7 +68,7 @@ public class TeamTest {
         testTeam.addPlayer(testPlayer1);
         assertEquals(1, testTeam.rosterNumber());
         assertTrue(testTeam.getRoster().contains(testPlayer1));
-        assertFalse(testTeam.removePlayer("Klay Thompson"));
+        assertFalse(testTeam.removePlayer("Tristan Thompson"));
     }
 
     @Test

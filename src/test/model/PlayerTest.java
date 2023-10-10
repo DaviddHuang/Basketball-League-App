@@ -17,6 +17,8 @@ class PlayerTest {
     void testConstructor() {
         assertEquals("Steph Curry", testPlayer.getName());
         assertEquals(30, testPlayer.getJerseyNumber());
+        assertEquals(187, testPlayer.getHeight());
+        assertEquals(180.0, testPlayer.getWeight());
     }
 
     @Test
