@@ -31,8 +31,9 @@ public class TeamTest {
 
     @Test
     void testAddPlayer() {
-        testTeam.addPlayer(testPlayer1);
+        assertTrue(testTeam.addPlayer(testPlayer1));
         assertEquals(1, testTeam.getRoster().size());
+        assertTrue(testTeam.getRoster().contains(testPlayer1));
     }
 
     @Test

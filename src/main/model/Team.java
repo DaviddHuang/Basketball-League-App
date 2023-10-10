@@ -31,7 +31,7 @@ public class Team {
             }
         }
         roster.add(player);
-        return false;
+        return true;
     }
 
     // MODIFIES: this

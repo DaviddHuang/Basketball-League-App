@@ -24,7 +24,7 @@ public class LeagueTest {
 
     @Test
     void testAddTeam() {
-        testLeague.addTeam(testTeam1);
+        assertTrue(testLeague.addTeam(testTeam1));
         assertEquals(1, testLeague.getAmountOfTeams());
         assertTrue(testLeague.getTeams().contains(testTeam1));
     }
@@ -41,7 +41,7 @@ public class LeagueTest {
     @Test
     void testAddTeamFail() {
         testLeague.addTeam(testTeam1);
-        testLeague.addTeam(testTeam1);
+        assertFalse(testLeague.addTeam(testTeam1));
         assertEquals(1, testLeague.getAmountOfTeams());
         assertTrue(testLeague.getTeams().contains(testTeam1));
     }
