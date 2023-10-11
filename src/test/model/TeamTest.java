@@ -98,6 +98,17 @@ public class TeamTest {
     }
 
     @Test
+    void testRemovePlayerInjuredFail() {
+        testTeam.addPlayer(testPlayer1);
+        testPlayer1.isPlayerHealthy(false);
+        testTeam.addPlayerInjuryReserve(testPlayer1);
+        assertEquals(1, testTeam.getInjuryReserve().size());
+        assertFalse(testTeam.removePlayer("Steph Curry"));
+        assertEquals(1, testTeam.getInjuryReserve().size());
+        assertEquals(0, testTeam.getRoster().size());
+    }
+
+    @Test
     void testWinPercentage() {
         testTeam.matchWin();
         testTeam.matchLose();
