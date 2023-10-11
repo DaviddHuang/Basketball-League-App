@@ -133,6 +133,13 @@ public class TeamTest {
     }
 
     @Test
+    void testAddInjuryReserveFail() {
+        testTeam.addPlayer(testPlayer1);
+        testPlayer1.isPlayerHealthy(true);
+        assertFalse(testTeam.addPlayerInjuryReserve(testPlayer1));
+    }
+
+    @Test
     void testMovePlayerOffInjuryReserve() {
         testTeam.addPlayer(testPlayer1);
         testPlayer1.isPlayerHealthy(false);

@@ -382,7 +382,6 @@ public class BasketballLeagueApp {
             playerMenu();
         }
         displayRosterInfo();
-        displayInjuryReserve();
         selectPlayerInput();
     }
 
@@ -395,6 +394,7 @@ public class BasketballLeagueApp {
             playerMenu();
         }
         displayRosterInfo();
+        displayInjuryReserve();
         removePlayer();
     }
 
@@ -406,6 +406,7 @@ public class BasketballLeagueApp {
             teamMenu();
         }
         displayTeamInfo();
+        displayInjuryReserve();
         removeTeam();
     }
 

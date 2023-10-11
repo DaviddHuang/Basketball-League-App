@@ -50,6 +50,13 @@ public class Team {
                 return true;
             }
         }
+        for (Player p : injuryReserve) {
+            if (p.getName().equalsIgnoreCase(name)) {
+                injuryReserve.remove(p);
+                roster.remove(p);
+                return true;
+            }
+        }
         return false;
     }
 
