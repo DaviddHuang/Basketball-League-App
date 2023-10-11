@@ -89,6 +89,8 @@ public class BasketballLeagueApp {
             System.out.println("League added: " + name);
             createTeam();
         }
+        System.out.println("Invalid Input...");
+        createLeague();
     }
 
     // MODIFIES: this
@@ -104,6 +106,8 @@ public class BasketballLeagueApp {
             funLeague.addTeam(funTeam);
             teamMenu();
         }
+        System.out.println("Invalid input...");
+        createTeam();
     }
 
     // MODIFIES: this
@@ -406,7 +410,6 @@ public class BasketballLeagueApp {
             teamMenu();
         }
         displayTeamInfo();
-        displayInjuryReserve();
         removeTeam();
     }
 
