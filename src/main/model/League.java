@@ -16,6 +16,8 @@ public class League {
     // MODIFIES: this
     // EFFECTS: adds team with given name to the league if team is not already in the league, return true if the add
     //          was successful, otherwise return false
+    // Code referenced from: https://github.students.cs.ubc.ca/CPSC210/ControlAndDataFlowProjects.git Hockey team
+    // util package, HockeyTeam class, method: insert()
     public boolean addTeam(Team team) {
         for (Team t : league) {
             if (t.getTeamName().equals(team.getTeamName())) {
@@ -28,6 +30,8 @@ public class League {
 
     // MODIFIES: this
     // EFFECTS: removes a team with the given name, return true if removal was successful, otherwise return false
+    // Code referenced from: https://github.students.cs.ubc.ca/CPSC210/ControlAndDataFlowProjects.git Hockey team
+    // util package, HockeyTeam class, method: insert()
     public boolean removeTeam(String name) {
         for (Team t : league) {
             if (t.getTeamName().equalsIgnoreCase(name)) {

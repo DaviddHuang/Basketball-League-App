@@ -24,6 +24,8 @@ public class Team {
     // MODIFIES: this
     // EFFECTS: adds a new player to the roster, if the player shares the same number as another player don't add
     //          the player, return true if add is successful and return false otherwise
+    // Code referenced from: https://github.students.cs.ubc.ca/CPSC210/ControlAndDataFlowProjects.git Hockey team
+    // util package, HockeyTeam class, method: insert()
     public Boolean addPlayer(Player player) {
         for (Player p : roster) {
             if (p.getJerseyNumber() == player.getJerseyNumber()) {
@@ -36,6 +38,8 @@ public class Team {
 
     // MODIFIES: this
     // EFFECTS: removes player with given name from roster and return true, otherwise return false
+    // Code referenced from: https://github.students.cs.ubc.ca/CPSC210/ControlAndDataFlowProjects.git Hockey team
+    // util package, HockeyTeam class, method: remove()
     public boolean removePlayer(String name) {
         for (Player p : roster) {
             if (p.getName().equalsIgnoreCase(name)) {
