@@ -5,6 +5,7 @@ public class Player {
     private String name;
     private int number;
     private Double weight;
+    private String position;
     private int height;
     private int points;
     private int rebounds;
@@ -15,11 +16,12 @@ public class Player {
     // MODIFIES: this
     // EFFECTS: constructs a player with a name and a jersey number, along with their height,
     //          weight, points, rebounds, assists, and games played
-    public Player(String name, int number, int height, Double weight) {
+    public Player(String name, String position, int number, int height, Double weight) {
         this.name = name;
         this.number = number;
         this.height = height;
         this.weight = weight;
+        this.position = position;
         points = 0;
         rebounds = 0;
         assists = 0;
@@ -98,5 +100,9 @@ public class Player {
 
     public int getHeight() {
         return height;
+    }
+
+    public String getPosition() {
+        return position;
     }
 }

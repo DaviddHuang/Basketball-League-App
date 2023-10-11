@@ -16,9 +16,9 @@ public class TeamTest {
     @BeforeEach
     void setup(){
         testTeam = new Team("Shanghai Sharks");
-        testPlayer1 = new Player("Lebron James", 23, 195, 230.3);
-        testPlayer2 = new Player("Kevin Durant", 35, 202, 201.7);
-        testPlayer3 = new Player("Ducky", 23, 201, 201.9);
+        testPlayer1 = new Player("Lebron James","SF" ,23, 195, 230.3);
+        testPlayer2 = new Player("Kevin Durant", "SF",35, 202, 201.7);
+        testPlayer3 = new Player("Ducky", "C",23, 201, 201.9);
     }
 
     @Test

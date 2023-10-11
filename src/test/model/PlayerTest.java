@@ -10,7 +10,7 @@ class PlayerTest {
 
     @BeforeEach
     void setUp() {
-        testPlayer = new Player("Steph Curry", 30, 187, 180.0);
+        testPlayer = new Player("Steph Curry", "PG", 30, 187, 180.0);
     }
 
     @Test
@@ -19,6 +19,7 @@ class PlayerTest {
         assertEquals(30, testPlayer.getJerseyNumber());
         assertEquals(187, testPlayer.getHeight());
         assertEquals(180.0, testPlayer.getWeight());
+        assertEquals("PG", testPlayer.getPosition());
     }
 
     @Test

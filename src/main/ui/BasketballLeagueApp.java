@@ -112,6 +112,9 @@ public class BasketballLeagueApp {
     private void createPlayer() {
         System.out.println("Please enter the name of a player you want to add to the roster: ");
         String name = input.next();
+        System.out.println("Please enter the position of the player: (PG = Point Guard, SG = Shooting Guard, SF ="
+                + " Small Forward, PF = Power Forward, C = Center) ");
+        String pos = input.next();
         System.out.println("Please enter the players jersey number: ");
         int jersey = input.nextInt();
         checkSameJersey(jersey);
@@ -119,7 +122,7 @@ public class BasketballLeagueApp {
         int height = input.nextInt();
         System.out.println("Please enter the players weight(lbs): ");
         double weight = input.nextDouble();
-        myPlayer = new Player(name, jersey, height, weight);
+        myPlayer = new Player(name, pos, jersey, height, weight);
         funTeam.addPlayer(myPlayer);
         System.out.println("Player added: " + myPlayer.getName());
         playerMenu();
@@ -131,17 +134,25 @@ public class BasketballLeagueApp {
     private void removePlayer() {
         System.out.println("Please enter the name of a player on your roster you wish to remove: ");
         String name = input.next();
-        funTeam.removePlayer(name);
-        System.out.println("Played removed: " + name);
-        playerMenu();
+        if (funTeam.removePlayer(name)) {
+            System.out.println("Played removed: " + name);
+            playerMenu();
+        } else {
+            System.out.println("That player does not exist...");
+            removePlayer();
+        }
     }
 
     private void removeTeam() {
         System.out.println("Please enter the name of a team in the league you wish to remove: ");
         String teamName = input.next();
-        funLeague.removeTeam(teamName);
-        System.out.println("Team removed: " + teamName);
-        teamMenu();
+        if (funLeague.removeTeam(teamName)) {
+            System.out.println("Team removed: " + teamName);
+            teamMenu();
+        } else {
+            System.out.println("That team does not exist...");
+            removeTeam();
+        }
     }
 
     // EFFECTS: displays options that a user has when interacting with a player
@@ -217,10 +228,11 @@ public class BasketballLeagueApp {
         System.out.println("Current Roster: ");
         System.out.println("---------------");
         for (Player p : funTeam.getRoster()) {
-            System.out.println("Name: " + p.getName() + " ||" + " Jersey Number: " + p.getJerseyNumber()
-                    + " ||" + " Height: " + p.getHeight() + "cm" + " ||" + " Weight: " + p.getWeight() + "lbs" + " ||"
-                    + " PPG: " + p.averagePoints() + " ||" + " RPG: " + p.averageRebounds() + " ||" + " APG: "
-                    + p.averageAssists() + " ||" + " GP: " + p.getGamesPlayed());
+            System.out.println("Name: " + p.getName() + " ||" + " Position: " + p.getPosition() + " ||"
+                    + " Jersey Number: " + p.getJerseyNumber() + " ||" + " Height: " + p.getHeight() + "cm"
+                    + " ||" + " Weight: " + p.getWeight() + "lbs" + " ||" + " PPG: " + p.averagePoints() + " ||"
+                    + " RPG: " + p.averageRebounds() + " ||" + " APG: " + p.averageAssists() + " ||" + " GP: "
+                    + p.getGamesPlayed());
         }
     }
 
@@ -393,6 +405,8 @@ public class BasketballLeagueApp {
         System.out.println("Proceeding with current team!");
     }
 
+    // EFFECTS: prints prompt if user tries to select team with no teams in the league, display the team information
+    //          if the league is not empty
     private void selectTeamWithNoTeam() {
         if (funLeague.getTeams().isEmpty()) {
             System.out.println("Cannot select team if there are no teams. Please add a team to continue.");
