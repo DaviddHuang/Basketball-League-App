@@ -84,4 +84,26 @@ public class TeamTest {
     void testWinPercentageZeroGamesPlayed() {
         assertEquals(0, testTeam.winPercentage());
     }
+
+    @Test
+    void testTeamRecord() {
+        testTeam.teamRecord(50,2);
+        assertEquals(50, testTeam.getWins());
+        assertEquals(2, testTeam.getLosses());
+        assertEquals(52, testTeam.getTeamGamesPlayed());
+        assertEquals(0.962, testTeam.winPercentage());
+    }
+
+    @Test
+    void testTeamRecordMultiple() {
+        testTeam.teamRecord(50,2);
+        assertEquals(50, testTeam.getWins());
+        assertEquals(2, testTeam.getLosses());
+        assertEquals(52, testTeam.getTeamGamesPlayed());
+        assertEquals(0.962, testTeam.winPercentage());
+        testTeam.teamRecord(4, 0);
+        assertEquals(54, testTeam.getWins());
+        assertEquals(2, testTeam.getLosses());
+        assertEquals(0.964, testTeam.winPercentage());
+    }
 }

@@ -55,6 +55,15 @@ public class Team {
         return Math.round(teamWinPercentage * 1000.0) / 1000.0;
     }
 
+    // REQUIRES: wins >= 0, losses >= 0, gamesPlayed >= 0
+    // MODIFIES: this
+    // EFFECTS: updates the teams wins, losses
+    public void teamRecord(int wins, int losses) {
+        this.wins += wins;
+        this.losses += losses;
+        this.teamGamesPlayed = this.wins + this.losses;
+    }
+
     // MODIFIES: this
     // EFFECTS: increases the number of wins by a team by 1
     public void matchWin() {

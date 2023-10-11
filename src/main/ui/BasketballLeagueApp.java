@@ -95,7 +95,7 @@ public class BasketballLeagueApp {
     // EFFECTS: take a name from the user and creates a team with that name then adds it to the league then displays
     //          team menu
     private void createTeam() {
-        System.out.println("Please enter the name of your team: ");
+        System.out.println("Please enter the name of a team: ");
         String name = input.next();
 
         if (!name.isEmpty()) {
@@ -136,6 +136,14 @@ public class BasketballLeagueApp {
         playerMenu();
     }
 
+    private void removeTeam() {
+        System.out.println("Please enter the name of a team in the league you wish to remove: ");
+        String teamName = input.next();
+        funLeague.removeTeam(teamName);
+        System.out.println("Team removed: " + teamName);
+        teamMenu();
+    }
+
     // EFFECTS: displays options that a user has when interacting with a player
     // Code referenced from https://github.students.cs.ubc.ca/CPSC210/TellerApp.git from the tellerApp class in the ui
     // package, method: runTeller()
@@ -157,6 +165,8 @@ public class BasketballLeagueApp {
                 isRosterEmptySelectPlayer();
             } else if (newPlayer.equals("remove player")) {
                 isRosterEmptyRemovePlayer();
+            } else if (newPlayer.equals("edit")) {
+                changeRecord();
             } else {
                 System.out.println("Invalid Selection...");
                 playerMenu();
@@ -168,29 +178,28 @@ public class BasketballLeagueApp {
     // Code referenced from https://github.students.cs.ubc.ca/CPSC210/TellerApp.git from the tellerApp class in the ui
     // package method: runTeller()
     private void teamMenu() {
-        boolean teamMenuNotOver = true;
         teamMenuPrints();
 
-        while (teamMenuNotOver) {
-            String newTeam = input.next();
-            newTeam = newTeam.toLowerCase();
-            if (newTeam.equals("new")) {
-                createTeam();
-            } else if (newTeam.equals("menu")) {
-                startApp();
-            } else if (newTeam.equals("continue")) {
-                System.out.println("Current Team Selected: " + funTeam.getTeamName());
-                playerMenu();
-            } else if (newTeam.equals("view")) {
-                displayTeamInfo();
-                teamMenu();
-            } else if (newTeam.equals("select team")) {
-                displayTeamInfo();
-                selectTeamUseAsInput();
-            } else {
-                System.out.println("Invalid Selection...");
-                teamMenu();
-            }
+        String newTeam = input.next();
+        newTeam = newTeam.toLowerCase();
+        if (newTeam.equals("new")) {
+            createTeam();
+        } else if (newTeam.equals("menu")) {
+            startApp();
+        } else if (newTeam.equals("continue")) {
+            continueWithNoTeam();
+            playerMenu();
+        } else if (newTeam.equals("view")) {
+            displayTeamInfo();
+            teamMenu();
+        } else if (newTeam.equals("select team")) {
+            selectTeamWithNoTeam();
+            selectTeamUseAsInput();
+        } else if (newTeam.equals("remove team")) {
+            isTeamEmptyRemoveTeam();
+        } else {
+            System.out.println("Invalid Selection...");
+            teamMenu();
         }
     }
 
@@ -198,9 +207,15 @@ public class BasketballLeagueApp {
     //          assists
     private void displayRosterInfo() {
         if (funTeam.getRoster().isEmpty()) {
-            System.out.println("The roster is empty.");
+            System.out.println("Team: " + funTeam.getTeamName() + " ||" + " Wins: " + funTeam.getWins() + " ||"
+                    + " Losses: " + funTeam.getLosses() + " ||" + " PCT: " + funTeam.winPercentage());
+            System.out.println("The roster is empty...");
+            return;
         }
+        System.out.println("Team: " + funTeam.getTeamName() + " ||" + " Wins: " + funTeam.getWins() + " ||"
+                + " Losses: " + funTeam.getLosses() + " ||" + " PCT: " + funTeam.winPercentage());
         System.out.println("Current Roster: ");
+        System.out.println("---------------");
         for (Player p : funTeam.getRoster()) {
             System.out.println("Name: " + p.getName() + " ||" + " Jersey Number: " + p.getJerseyNumber()
                     + " ||" + " Height: " + p.getHeight() + "cm" + " ||" + " Weight: " + p.getWeight() + "lbs" + " ||"
@@ -211,10 +226,14 @@ public class BasketballLeagueApp {
 
     // EFFECTS: displays the teams name, wins, and losses
     private void displayTeamInfo() {
+        if (funLeague.getTeams().isEmpty()) {
+            System.out.println("The league is currently empty...");
+            return;
+        }
         System.out.println("Current Teams: ");
         for (Team t : funLeague.getTeams()) {
             System.out.println("Team: " + t.getTeamName() + " ||" + " Wins: " + t.getWins() + " ||" + " Losses: "
-                     + t.getLosses());
+                     + t.getLosses() + " ||" + " PCT: " + t.winPercentage());
         }
     }
 
@@ -225,7 +244,8 @@ public class BasketballLeagueApp {
         System.out.println("\nType 'New' to add a new team: ");
         System.out.println("Type 'Continue' to add players to the current team: ");
         System.out.println("Type 'View' to view a list of teams: ");
-        System.out.println("Type 'Select Team' to add players to a different team: ");
+        System.out.println("Type 'Select Team' to add players to a different team or edit a teams record: ");
+        System.out.println("Type 'Remove Team' to remove a team: ");
         System.out.println("Type 'Menu' to go back to the main menu: ");
     }
 
@@ -281,6 +301,7 @@ public class BasketballLeagueApp {
     private void playerMenuPrints() {
         System.out.println("\nType 'New' to add new player: ");
         System.out.println("Type 'View' to view the current roster: ");
+        System.out.println("Type 'Edit' to edit the current teams record");
         System.out.println("Type 'Select Player' for the player you wish to add stats for: ");
         System.out.println("Type 'Remove Player' for the player you wish to remove: ");
         System.out.println("Type 'Back' to go back: ");
@@ -328,6 +349,16 @@ public class BasketballLeagueApp {
         removePlayer();
     }
 
+    private void isTeamEmptyRemoveTeam() {
+        if (funLeague.getTeams().isEmpty()) {
+            System.out.println("The league is empty...");
+            teamMenu();
+        }
+        displayTeamInfo();
+        removeTeam();
+    }
+
+    // REQUIRES: jersey >= 0
     // MODIFIES: this
     // EFFECTS: checks if players on the roster have same jersey as the given jersey, create a new player if the
     //          jersey's match
@@ -338,5 +369,35 @@ public class BasketballLeagueApp {
                 createPlayer();
             }
         }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: gives prompt to user to enter team wins, team losses, and adds those records to the current team, then
+    //          displays team menu
+    private void changeRecord() {
+        System.out.println("Please enter the latest amount of wins this team has: ");
+        int wins = input.nextInt();
+        System.out.println("Please enter the latest amount of losses this team has: ");
+        int losses = input.nextInt();
+        funTeam.teamRecord(wins, losses);
+        System.out.println("Team record for: " + funTeam.getTeamName() + " has been updated!");
+        playerMenu();
+    }
+
+    // EFFECTS: prints prompt if user tries to continue with no teams in the league
+    private void continueWithNoTeam() {
+        if (funLeague.getTeams().isEmpty()) {
+            System.out.println("Cannot proceed if there are no teams. Please add a team to continue.");
+            teamMenu();
+        }
+        System.out.println("Proceeding with current team!");
+    }
+
+    private void selectTeamWithNoTeam() {
+        if (funLeague.getTeams().isEmpty()) {
+            System.out.println("Cannot select team if there are no teams. Please add a team to continue.");
+            teamMenu();
+        }
+        displayTeamInfo();
     }
 }

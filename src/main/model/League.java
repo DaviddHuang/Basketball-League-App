@@ -30,7 +30,7 @@ public class League {
     // EFFECTS: removes a team with the given name, return true if removal was successful, otherwise return false
     public boolean removeTeam(String name) {
         for (Team t : league) {
-            if (t.getTeamName().equals(name)) {
+            if (t.getTeamName().equalsIgnoreCase(name)) {
                 league.remove(t);
                 return true;
             }
