@@ -162,29 +162,29 @@ public class BasketballLeagueApp {
     // Code referenced from https://github.students.cs.ubc.ca/CPSC210/TellerApp.git from the tellerApp class in the ui
     // package, method: runTeller()
     private void playerMenu() {
-        boolean menuNotOver = true;
         playerMenuPrints();
 
-        while (menuNotOver) {
-            String newPlayer = input.next();
-            newPlayer = newPlayer.toLowerCase();
-            if (newPlayer.equals("new")) {
-                createPlayer();
-            } else if (newPlayer.equals("back")) {
-                teamMenu();
-            } else if (newPlayer.equals("view")) {
-                displayRosterInfo();
-                playerMenu();
-            } else if (newPlayer.equals("select player")) {
-                isRosterEmptySelectPlayer();
-            } else if (newPlayer.equals("remove player")) {
-                isRosterEmptyRemovePlayer();
-            } else if (newPlayer.equals("edit")) {
-                changeRecord();
-            } else {
-                System.out.println("Invalid Selection...");
-                playerMenu();
-            }
+        String newPlayer = input.next();
+        newPlayer = newPlayer.toLowerCase();
+        if (newPlayer.equals("new")) {
+            createPlayer();
+        } else if (newPlayer.equals("back")) {
+            teamMenu();
+        } else if (newPlayer.equals("view")) {
+            displayRosterInfo();
+            playerMenu();
+        } else if (newPlayer.equals("injuries")) {
+            displayInjuryReserve();
+            playerMenu();
+        } else if (newPlayer.equals("select player")) {
+            isRosterEmptySelectPlayer();
+        } else if (newPlayer.equals("remove player")) {
+            isRosterEmptyRemovePlayer();
+        } else if (newPlayer.equals("edit")) {
+            changeRecord();
+        } else {
+            System.out.println("Invalid Selection...");
+            playerMenu();
         }
     }
 
@@ -252,6 +252,22 @@ public class BasketballLeagueApp {
         }
     }
 
+    private void displayInjuryReserve() {
+        if (funTeam.getInjuryReserve().isEmpty()) {
+            System.out.println("There are no injured players...");
+            return;
+        }
+        System.out.println("Current Injured Players: ");
+        System.out.println("---------------");
+        for (Player p : funTeam.getInjuryReserve()) {
+            System.out.println("Name: " + p.getName() + " ||" + " Position: " + p.getPosition() + " ||"
+                    + " #: " + p.getJerseyNumber() + " ||" + " Height: " + p.getHeight() + "cm"
+                    + " ||" + " Weight: " + p.getWeight() + "lbs" + " ||" + " PPG: " + p.averagePoints() + " ||"
+                    + " RPG: " + p.averageRebounds() + " ||" + " APG: " + p.averageAssists() + " ||" + " SPG: "
+                    + p.averageSteals() + " ||" + " BPG: " + p.averageBlocks() + " ||" + " GP: " + p.getGamesPlayed());
+        }
+    }
+
     // EFFECTS: prints team menu options
     // Code referenced from https://github.students.cs.ubc.ca/CPSC210/TellerApp.git from the tellerApp class in the ui
     // package, method: displayMenu()
@@ -298,6 +314,13 @@ public class BasketballLeagueApp {
                 addStatsForPlayer();
             }
         }
+        for (Player p : funTeam.getInjuryReserve()) {
+            if (p.getName().equalsIgnoreCase(name)) {
+                System.out.println("Current Player Selected: " + p.getName());
+                myPlayer = p;
+                addStatsForPlayer();
+            }
+        }
         System.out.println("Player not found...");
         selectPlayerInput();
     }
@@ -316,6 +339,7 @@ public class BasketballLeagueApp {
     private void playerMenuPrints() {
         System.out.println("\nType 'New' to add new player: ");
         System.out.println("Type 'View' to view the current roster: ");
+        System.out.println("Type 'Injuries' to view currently injured players: ");
         System.out.println("Type 'Edit' to edit the current teams record");
         System.out.println("Type 'Select Player' for the player you wish to add stats for: ");
         System.out.println("Type 'Remove Player' for the player you wish to remove: ");
@@ -327,6 +351,9 @@ public class BasketballLeagueApp {
     // EFFECTS: gives prompt for user input for latest amount of points, rebounds, assists, and games played for the
     //          current player, takes user input and updates the current stats of the player
     private void addStatsForPlayer() {
+        System.out.println("Please enter the players current healthy status (True = healthy, false = injured): ");
+        boolean status = input.nextBoolean();
+        myPlayer.isPlayerHealthy(status);
         System.out.println("Please enter the latest amount of points scored for this player: ");
         int points = input.nextInt();
         System.out.println("Please enter the latest amount of rebounds collected for this player: ");
@@ -340,6 +367,8 @@ public class BasketballLeagueApp {
         System.out.println("Please enter the latest amount of games played for this player: ");
         int gamesPlayed = input.nextInt();
         myPlayer.playGame(points, rebounds, assists, steals,blocks, gamesPlayed);
+        funTeam.addPlayerInjuryReserve(myPlayer);
+        funTeam.movePlayerOffInjuryReserve(myPlayer);
         System.out.println("Player stats have been updated for player: " + myPlayer.getName());
         playerMenu();
     }
@@ -348,11 +377,12 @@ public class BasketballLeagueApp {
     // EFFECTS: checks if the roster is currently empty, display the current roster and prompts user to
     //          select a player
     private void isRosterEmptySelectPlayer() {
-        if (funTeam.getRoster().isEmpty()) {
+        if (funTeam.getRoster().isEmpty() && funTeam.getInjuryReserve().isEmpty()) {
             System.out.println("The roster is currently empty...");
             playerMenu();
         }
         displayRosterInfo();
+        displayInjuryReserve();
         selectPlayerInput();
     }
 

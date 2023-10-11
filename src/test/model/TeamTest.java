@@ -106,4 +106,16 @@ public class TeamTest {
         assertEquals(2, testTeam.getLosses());
         assertEquals(0.964, testTeam.winPercentage());
     }
+
+    @Test
+    void testAddInjuryReserve() {
+        testTeam.addPlayer(testPlayer1);
+        testTeam.addPlayer(testPlayer2);
+        testPlayer1.isPlayerHealthy(false);
+        testTeam.addPlayerInjuryReserve(testPlayer1);
+        assertEquals(1, testTeam.getRoster().size());
+        assertEquals(1, testTeam.getInjuryReserve().size());
+        assertTrue(testTeam.getRoster().contains(testPlayer2));
+        assertTrue(testTeam.getInjuryReserve().contains(testPlayer1));
+    }
 }

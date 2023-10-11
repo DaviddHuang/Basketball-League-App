@@ -3,7 +3,7 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
     private Player testPlayer;
@@ -20,6 +20,7 @@ class PlayerTest {
         assertEquals(187, testPlayer.getHeight());
         assertEquals(180.0, testPlayer.getWeight());
         assertEquals("PG", testPlayer.getPosition());
+        assertTrue(testPlayer.getHealthStatus());
     }
 
     @Test
@@ -107,5 +108,12 @@ class PlayerTest {
     @Test
     void testAverageStealsZero() {
         assertEquals(0, testPlayer.averageSteals());
+    }
+
+    @Test
+    void testIsPlayerHealthy() {
+        assertTrue(testPlayer.getHealthStatus());
+        testPlayer.isPlayerHealthy(false);
+        assertFalse(testPlayer.getHealthStatus());
     }
 }
