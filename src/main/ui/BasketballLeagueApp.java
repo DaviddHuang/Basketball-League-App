@@ -130,7 +130,7 @@ public class BasketballLeagueApp {
 
     // MODIFIES: this
     // EFFECTS: asks user for input for player they want to remove, takes input and removes player from the team then
-    //          prompts player menu
+    //          prompts player menu if successful, otherwise keep prompting user to remove player
     private void removePlayer() {
         System.out.println("Please enter the name of a player on your roster you wish to remove: ");
         String name = input.next();
@@ -143,6 +143,9 @@ public class BasketballLeagueApp {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: asks user for input for team they want to remove, takes input and removes team from league, prompts
+    //          team menu if successful, otherwise keep prompting to remove team
     private void removeTeam() {
         System.out.println("Please enter the name of a team in the league you wish to remove: ");
         String teamName = input.next();
@@ -365,6 +368,8 @@ public class BasketballLeagueApp {
         removePlayer();
     }
 
+    // MODIFIES: this
+    // EFFECTS: checks if the league is currently empty, displays the current teams and prompts user to remove a team
     private void isTeamEmptyRemoveTeam() {
         if (funLeague.getTeams().isEmpty()) {
             System.out.println("The league is empty...");
