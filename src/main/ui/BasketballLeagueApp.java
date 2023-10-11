@@ -229,10 +229,10 @@ public class BasketballLeagueApp {
         System.out.println("---------------");
         for (Player p : funTeam.getRoster()) {
             System.out.println("Name: " + p.getName() + " ||" + " Position: " + p.getPosition() + " ||"
-                    + " Jersey Number: " + p.getJerseyNumber() + " ||" + " Height: " + p.getHeight() + "cm"
+                    + " #: " + p.getJerseyNumber() + " ||" + " Height: " + p.getHeight() + "cm"
                     + " ||" + " Weight: " + p.getWeight() + "lbs" + " ||" + " PPG: " + p.averagePoints() + " ||"
-                    + " RPG: " + p.averageRebounds() + " ||" + " APG: " + p.averageAssists() + " ||" + " GP: "
-                    + p.getGamesPlayed());
+                    + " RPG: " + p.averageRebounds() + " ||" + " APG: " + p.averageAssists() + " ||" + " SPG: "
+                    + p.averageSteals() + " ||" + " BPG: " + p.averageBlocks() + " ||" + " GP: " + p.getGamesPlayed());
         }
     }
 
@@ -324,15 +324,19 @@ public class BasketballLeagueApp {
     // EFFECTS: gives prompt for user input for latest amount of points, rebounds, assists, and games played for the
     //          current player, takes user input and updates the current stats of the player
     private void addStatsForPlayer() {
-        System.out.println("Please enter the latest amount of points for this player: ");
+        System.out.println("Please enter the latest amount of points scored for this player: ");
         int points = input.nextInt();
-        System.out.println("Please enter the latest amount of rebounds for this player: ");
+        System.out.println("Please enter the latest amount of rebounds collected for this player: ");
         int rebounds = input.nextInt();
-        System.out.println("Please enter the latest amount of assists for this player: ");
+        System.out.println("Please enter the latest amount of assists collected for this player: ");
         int assists = input.nextInt();
+        System.out.println("Please enter the latest amount of steals collected for this player: ");
+        int steals = input.nextInt();
+        System.out.println("Please enter the latest amount of blocks collected for this player: ");
+        int blocks = input.nextInt();
         System.out.println("Please enter the latest amount of games played for this player: ");
         int gamesPlayed = input.nextInt();
-        myPlayer.playGame(points, rebounds, assists, gamesPlayed);
+        myPlayer.playGame(points, rebounds, assists, steals,blocks, gamesPlayed);
         System.out.println("Player stats have been updated for player: " + myPlayer.getName());
         playerMenu();
     }

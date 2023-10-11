@@ -11,11 +11,13 @@ public class Player {
     private int rebounds;
     private int assists;
     private int gamesPlayed;
+    private int steals;
+    private int blocks;
 
     // REQUIRES: 0 <= number <= 99, height >= 0, weight >= 0.00
     // MODIFIES: this
     // EFFECTS: constructs a player with a name and a jersey number, along with their height,
-    //          weight, points, rebounds, assists, and games played
+    //          weight, points, rebounds, assists, steals, blocks, and games played
     public Player(String name, String position, int number, int height, Double weight) {
         this.name = name;
         this.number = number;
@@ -25,6 +27,8 @@ public class Player {
         points = 0;
         rebounds = 0;
         assists = 0;
+        steals = 0;
+        blocks = 0;
         gamesPlayed = 0;
     }
 
@@ -56,15 +60,34 @@ public class Player {
         return Math.round(assistAverage * 10.0) / 10.0;
     }
 
+    // EFFECTS: averages the steals of a player
+    public Double averageSteals() {
+        if (gamesPlayed == 0) {
+            return 0.0;
+        }
+        double stealAverage = (double) steals / gamesPlayed;
+        return Math.round(stealAverage * 10.0) / 10.0;
+    }
+
+    // EFFECTS: averages the steals of a player
+    public Double averageBlocks() {
+        if (gamesPlayed == 0) {
+            return 0.0;
+        }
+        double blockAverage = (double) blocks / gamesPlayed;
+        return Math.round(blockAverage * 10.0) / 10.0;
+    }
 
     // REQUIRES: points >= 0, rebounds >= 0, assists >= 0, gamesPlayed >= 0
     // MODIFIES: this
     // REQUIRES: adds points, rebounds, assists and gamesPlayed to their respective totals,
     //           increase the number of games played
-    public void playGame(int points, int rebounds, int assists, int gamesPlayed) {
+    public void playGame(int points, int rebounds, int assists, int steals, int blocks, int gamesPlayed) {
         this.points += points;
         this.rebounds += rebounds;
         this.assists += assists;
+        this.steals += steals;
+        this.blocks += blocks;
         this.gamesPlayed += gamesPlayed;
     }
 
@@ -88,6 +111,14 @@ public class Player {
 
     public int getAssists() {
         return assists;
+    }
+
+    public int getSteals() {
+        return steals;
+    }
+
+    public int getBlocks() {
+        return blocks;
     }
 
     public int getGamesPlayed() {
