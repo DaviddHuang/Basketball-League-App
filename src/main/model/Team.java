@@ -38,7 +38,7 @@ public class Team {
     // EFFECTS: removes player with given name from roster and return true, otherwise return false
     public boolean removePlayer(String name) {
         for (Player p : roster) {
-            if (p.getName().toLowerCase().equals(name.toLowerCase())) {
+            if (p.getName().equalsIgnoreCase(name)) {
                 roster.remove(p);
                 return true;
             }
