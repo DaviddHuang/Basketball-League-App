@@ -62,7 +62,7 @@ public class Team {
 
     // MODIFIES: this
     // EFFECTS: checks if each player is healthy, if they are not remove them from roster and add to injury reserve
-    //          return true if successful, otherwise return false;
+    //          return true if successful, otherwise return false
     public boolean addPlayerInjuryReserve(Player player) {
         for (Player p : roster) {
             if (p.getHealthStatus() == false) {
@@ -77,12 +77,13 @@ public class Team {
     // MODIFIES: this
     // EFFECTS: removes player off IR if they are healthy and adds them back into roster, return true if successful
     //          otherwise return false
-    public boolean movePlayerOffInjuryReserve(Player player) {
-        if (injuryReserve.contains(player) && player.getHealthStatus()) {
-            injuryReserve.remove(player);
-            roster.add(player);
-
-            return true;
+    public boolean movePlayerOffInjuryReserve() {
+        for (Player p : injuryReserve) {
+            if (p.getHealthStatus() == true) {
+                injuryReserve.remove(p);
+                roster.add(p);
+                return true;
+            }
         }
         return false;
     }

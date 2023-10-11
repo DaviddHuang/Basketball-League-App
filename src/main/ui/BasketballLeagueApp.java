@@ -258,7 +258,7 @@ public class BasketballLeagueApp {
             return;
         }
         System.out.println("Current Injured Players: ");
-        System.out.println("---------------");
+        System.out.println("-------------------------");
         for (Player p : funTeam.getInjuryReserve()) {
             System.out.println("Name: " + p.getName() + " ||" + " Position: " + p.getPosition() + " ||"
                     + " #: " + p.getJerseyNumber() + " ||" + " Height: " + p.getHeight() + "cm"
@@ -368,7 +368,7 @@ public class BasketballLeagueApp {
         int gamesPlayed = input.nextInt();
         myPlayer.playGame(points, rebounds, assists, steals,blocks, gamesPlayed);
         funTeam.addPlayerInjuryReserve(myPlayer);
-        funTeam.movePlayerOffInjuryReserve(myPlayer);
+        funTeam.movePlayerOffInjuryReserve();
         System.out.println("Player stats have been updated for player: " + myPlayer.getName());
         playerMenu();
     }

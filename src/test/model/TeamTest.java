@@ -72,6 +72,32 @@ public class TeamTest {
     }
 
     @Test
+    void testRemovePlayerInjured() {
+        testTeam.addPlayer(testPlayer1);
+        testPlayer1.isPlayerHealthy(false);
+        testTeam.addPlayerInjuryReserve(testPlayer1);
+        assertEquals(1, testTeam.getInjuryReserve().size());
+        testTeam.removePlayer("Lebron James");
+        assertEquals(0, testTeam.getInjuryReserve().size());
+        assertEquals(0, testTeam.getRoster().size());
+    }
+
+    @Test
+    void testRemovePlayerInjuredMultiple() {
+        testTeam.addPlayer(testPlayer1);
+        testTeam.addPlayer(testPlayer2);
+        testPlayer1.isPlayerHealthy(false);
+        testPlayer2.isPlayerHealthy(false);
+        testTeam.addPlayerInjuryReserve(testPlayer1);
+        testTeam.addPlayerInjuryReserve(testPlayer2);
+        assertEquals(2, testTeam.getInjuryReserve().size());
+        testTeam.removePlayer("Lebron James");
+        testTeam.removePlayer("Kevin Durant");
+        assertEquals(0, testTeam.getInjuryReserve().size());
+        assertEquals(0, testTeam.getRoster().size());
+    }
+
+    @Test
     void testWinPercentage() {
         testTeam.matchWin();
         testTeam.matchLose();
@@ -147,7 +173,7 @@ public class TeamTest {
         assertTrue(testTeam.getInjuryReserve().contains(testPlayer1));
         assertEquals(1, testTeam.getInjuryReserve().size());
         testPlayer1.isPlayerHealthy(true);
-        assertTrue(testTeam.movePlayerOffInjuryReserve(testPlayer1));
+        assertTrue(testTeam.movePlayerOffInjuryReserve());
         assertEquals(1, testTeam.getRoster().size());
         assertTrue(testTeam.getRoster().contains(testPlayer1));
     }
@@ -157,12 +183,11 @@ public class TeamTest {
         testTeam.addPlayer(testPlayer1);
         testPlayer1.isPlayerHealthy(false);
         testTeam.addPlayerInjuryReserve(testPlayer1);
-        assertTrue(testTeam.getInjuryReserve().contains(testPlayer1));
-        assertFalse(testTeam.movePlayerOffInjuryReserve(testPlayer1));
+        assertFalse(testTeam.movePlayerOffInjuryReserve());
     }
 
     @Test
     void testMovePlayerOffInjuryReserveNoPlayers() {
-        assertFalse(testTeam.movePlayerOffInjuryReserve(testPlayer1));
+        assertFalse(testTeam.movePlayerOffInjuryReserve());
     }
 }
