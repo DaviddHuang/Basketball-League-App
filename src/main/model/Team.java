@@ -12,7 +12,7 @@ public class Team {
     private String name;
 
     // MODIFIES: this
-    // EFFECTS: constructs a team with a name, 0 wins, and an empty roster list
+    // EFFECTS: constructs a team with a name, 0 wins, 0 losses, 0 games played, and an empty roster
     public Team(String name) {
         this.name = name;
         wins = 0;
@@ -38,7 +38,7 @@ public class Team {
     // EFFECTS: removes player with given name from roster and return true, otherwise return false
     public boolean removePlayer(String name) {
         for (Player p : roster) {
-            if (p.getName().equals(name)) {
+            if (p.getName().toLowerCase().equals(name.toLowerCase())) {
                 roster.remove(p);
                 return true;
             }
@@ -69,7 +69,7 @@ public class Team {
         teamGamesPlayed++;
     }
 
-    // getters and setters
+    // getters
 
     public List<Player> getRoster() {
         return this.roster;

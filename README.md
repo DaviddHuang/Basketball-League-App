@@ -24,10 +24,10 @@ for the game of basketball and my passion in computer science in hopes of creati
 with the same love for the sport as me.
 ## User Stories
 * As a user, I want to be able to add a team to a league
-* As a user, I want to be able to add a roster to a chosen team
-* As a user, I want to be able to add a player to a chosen roster
-* As a user, I want to be able to view a list of players on a roster
+* As a user, I want to be able to add players to a chosen team
+* As a user, I want to be able to view a list of players on a team
 * As a user, I want to be able to view a list of teams in a league
 * As a user, I want to be able to assign statistics such as points, rebounds, and assists, to a player
 * As a user, I want to be able to assign wins and losses to a team
 * As a user, I want to be able to view the statistics of each player
+* As a user, I want to be able to create a player

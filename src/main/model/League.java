@@ -2,6 +2,7 @@ package model;
 
 import java.util.*;
 
+// represents a basketball league with a name and an empty list of teams
 public class League {
     private List<Team> league;
     private String name;
@@ -36,6 +37,8 @@ public class League {
         }
         return false;
     }
+
+    // getters
 
     public String getLeagueName() {
         return name;

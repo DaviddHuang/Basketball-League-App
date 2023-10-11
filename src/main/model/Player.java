@@ -35,6 +35,7 @@ public class Player {
         return Math.round(pointsAverage * 10.0) / 10.0;
     }
 
+
     // EFFECTS: averages the rebounds of a player
     public Double averageRebounds() {
         if (gamesPlayed == 0) {
