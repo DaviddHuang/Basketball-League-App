@@ -9,12 +9,16 @@ public class LeagueTest {
     private League testLeague;
     private Team testTeam1;
     private Team testTeam2;
+    private Player testPlayer1;
+    private Player testPlayer2;
 
     @BeforeEach
     void setUp() {
         testLeague = new League("LA Fitness Rec League");
         testTeam1 = new Team("Shanghai Sharks");
         testTeam2 = new Team("Vancouver Grizzlies");
+        testPlayer1 = new Player("Stephen Curry", "PG", 30, 190, 190.0);
+        testPlayer2 = new Player("Lebron James", "SF", 23, 211, 210.0);
     }
 
     @Test
@@ -71,5 +75,21 @@ public class LeagueTest {
         testLeague.removeTeam("Vancouver Canucks");
         assertEquals(1, testLeague.getAmountOfTeams());
         assertTrue(testLeague.getTeams().contains(testTeam1));
+    }
+
+    @Test
+    void testCalculateLeagueMostValuablePlayer() {
+        testLeague.addTeam(testTeam2);
+        testLeague.addTeam(testTeam1);
+        testTeam1.addPlayer(testPlayer1);
+        testTeam2.addPlayer(testPlayer2);
+        testPlayer1.playGame(100,100,100,100,100,1);
+        testPlayer2.playGame(1,1,1,1,1,1);
+        assertTrue(testTeam1.calculateMostValuablePlayer());
+        assertTrue(testTeam2.calculateMostValuablePlayer());
+        assertTrue(testTeam1.getScoringLeader().contains(testPlayer1));
+        assertTrue(testTeam2.getScoringLeader().contains(testPlayer2));
+        assertTrue(testLeague.calculateLeagueMostValuablePlayer());
+        assertTrue(testLeague.getLeagueMostValuablePlayer().contains(testPlayer1));
     }
 }

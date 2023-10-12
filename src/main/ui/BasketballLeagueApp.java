@@ -218,9 +218,10 @@ public class BasketballLeagueApp {
             selectTeamUseAsInput();
         } else if (newTeam.equals("remove team")) {
             isTeamEmptyRemoveTeam();
+        } else if (newTeam.equals("end")) {
+            endSeason();
         } else {
-            System.out.println("Invalid Selection...");
-            teamMenu();
+            organizeTeamMenu();
         }
     }
 
@@ -246,7 +247,7 @@ public class BasketballLeagueApp {
         }
     }
 
-    // EFFECTS: displays the teams name, wins, and losses
+    // EFFECTS: displays the teams name, wins, and losses if there are any
     private void displayTeamInfo() {
         if (funLeague.getTeams().isEmpty()) {
             System.out.println("The league is currently empty...");
@@ -259,6 +260,7 @@ public class BasketballLeagueApp {
         }
     }
 
+    // EFFECTS: displays the teams injured players if there are any
     private void displayInjuryReserve() {
         if (funTeam.getInjuryReserve().isEmpty()) {
             System.out.println("There are no injured players...");
@@ -275,6 +277,19 @@ public class BasketballLeagueApp {
         }
     }
 
+    // EFFECTS: displays the league MVP
+    private void displayLeagueMostValuablePlayer() {
+        for (Player p : funLeague.getLeagueMostValuablePlayer()) {
+            System.out.println("League MVP: " + p.getName());
+        }
+    }
+
+    private void displayLeagueDefensivePlayer() {
+        for (Player p : funLeague.getLeagueDefensivePlayer()) {
+            System.out.println("League DPOY: " + p.getName());
+        }
+    }
+
     // EFFECTS: prints team menu options
     // Code referenced from https://github.students.cs.ubc.ca/CPSC210/TellerApp.git from the tellerApp class in the ui
     // package, method: displayMenu()
@@ -284,6 +299,7 @@ public class BasketballLeagueApp {
         System.out.println("Type 'View' to view a list of teams: ");
         System.out.println("Type 'Select Team' to add players to a different team or edit a teams record: ");
         System.out.println("Type 'Remove Team' to remove a team: ");
+        System.out.println("Type 'End' to end the league season: ");
         System.out.println("Type 'Menu' to go back to the main menu: ");
     }
 
@@ -374,6 +390,8 @@ public class BasketballLeagueApp {
         System.out.println("Please enter the latest amount of games played for this player: ");
         int gamesPlayed = input.nextInt();
         myPlayer.playGame(points, rebounds, assists, steals,blocks, gamesPlayed);
+        funTeam.calculateMostValuablePlayer();
+        funTeam.calculateDefensivePlayer();
         funTeam.addPlayerInjuryReserve();
         funTeam.movePlayerOffInjuryReserve();
         System.out.println("Player stats have been updated for player: " + myPlayer.getName());
@@ -415,6 +433,19 @@ public class BasketballLeagueApp {
         }
         displayTeamInfo();
         removeTeam();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets the league status to false and prints the MVP, DPOY, and exits the application
+    private void endSeason() {
+        funLeague.leagueStatus(false);
+        System.out.println("Congratulations! The season has ended!");
+        funLeague.calculateLeagueMostValuablePlayer();
+        displayLeagueMostValuablePlayer();
+        funLeague.calculateLeagueDefensivePlayer();
+        displayLeagueDefensivePlayer();
+
+        System.exit(0);
     }
 
     // REQUIRES: jersey >= 0
@@ -460,5 +491,11 @@ public class BasketballLeagueApp {
             teamMenu();
         }
         displayTeamInfo();
+    }
+
+    // EFFECTS: helps organize the team menu code
+    private void organizeTeamMenu() {
+        System.out.println("Invalid Selection...");
+        teamMenu();
     }
 }

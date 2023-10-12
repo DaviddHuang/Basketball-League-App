@@ -210,7 +210,7 @@ public class TeamTest {
         testTeam.addPlayer(testPlayer2);
         assertEquals(2, testTeam.getRoster().size());
         testTeam.calculateMostValuablePlayer();
-        assertEquals(1, testTeam.getRoster().size());
+        assertEquals(2, testTeam.getRoster().size());
         assertEquals(1, testTeam.getScoringLeader().size());
         assertTrue(testTeam.getScoringLeader().contains(testPlayer2));
     }
@@ -225,7 +225,7 @@ public class TeamTest {
         testTeam.addPlayer(testPlayer4);
         assertEquals(3, testTeam.getRoster().size());
         assertTrue(testTeam.calculateMostValuablePlayer());
-        assertEquals(2, testTeam.getRoster().size());
+        assertEquals(3, testTeam.getRoster().size());
         assertEquals(1, testTeam.getScoringLeader().size());
         assertTrue(testTeam.getScoringLeader().contains(testPlayer2));
     }
@@ -248,15 +248,15 @@ public class TeamTest {
 
     @Test
     void testCalculateDefensivePlayerMultiple() {
-        testPlayer1.playGame(1,1,1,2,1,1);
-        testPlayer2.playGame(1,1,1,1,1,1);
+        testPlayer1.playGame(1,1,1,1,1,1);
+        testPlayer2.playGame(1,1,1,2,1,1);
         testTeam.addPlayer(testPlayer1);
         testTeam.addPlayer(testPlayer2);
         assertEquals(2, testTeam.getRoster().size());
         assertTrue(testTeam.calculateDefensivePlayer());
         assertEquals(1, testTeam.getRoster().size());
         assertEquals(1, testTeam.getDefensiveLeader().size());
-        assertTrue(testTeam.getDefensiveLeader().contains(testPlayer1));
+        assertTrue(testTeam.getDefensiveLeader().contains(testPlayer2));
     }
 
     @Test

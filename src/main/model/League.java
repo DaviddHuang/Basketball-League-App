@@ -6,11 +6,18 @@ import java.util.*;
 public class League {
     private List<Team> league;
     private String name;
+    private boolean seasonNotOver;
+    private List<Player> leagueMostValuablePlayer;
+    private List<Player> leagueDefensivePlayer;
 
-    // EFFECTS: constructs a league with a name and empty list of teams
+    // EFFECTS: constructs a league with a name, empty list of teams, and season status set to true
     public League(String name) {
         this.name = name;
         this.league = new ArrayList<>();
+        this.seasonNotOver = true;
+        this.leagueMostValuablePlayer = new ArrayList<>();
+        this.leagueDefensivePlayer = new ArrayList<>();
+
     }
 
     // MODIFIES: this
@@ -42,6 +49,46 @@ public class League {
         return false;
     }
 
+    // MODIFIES: this
+    // EFFECTS: takes the scoring leader from each team and compares their MVP score, the player with the highest MVP
+    //          score becomes MVP and is added to the mvp list. Return true if successful, otherwise return false
+    public boolean calculateLeagueMostValuablePlayer() {
+        while (!league.isEmpty()) {
+            Player mvp = league.get(0).getScoringLeader().get(0);
+
+            for (Team t : league) {
+                if (mvp.mvpScore() < t.getScoringLeader().get(0).mvpScore()) {
+                    mvp = t.getScoringLeader().get(0);
+
+                }
+            }
+            leagueMostValuablePlayer.add(mvp);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean calculateLeagueDefensivePlayer() {
+        while (!league.isEmpty()) {
+            Player dpoy = league.get(0).getDefensiveLeader().get(0);
+
+            for (Team t : league) {
+                if (dpoy.dpoyScore() < t.getDefensiveLeader().get(0).dpoyScore()) {
+                    dpoy = t.getDefensiveLeader().get(0);
+
+                }
+            }
+            leagueDefensivePlayer.add(dpoy);
+            return true;
+        }
+        return false;
+    }
+
+    // EFFECTS: changes the status of the season to the given status
+    public void leagueStatus(boolean status) {
+        this.seasonNotOver = status;
+    }
+
     // getters
 
     public String getLeagueName() {
@@ -54,5 +101,13 @@ public class League {
 
     public List<Team> getTeams() {
         return league;
+    }
+
+    public List<Player> getLeagueMostValuablePlayer() {
+        return leagueMostValuablePlayer;
+    }
+
+    public List<Player> getLeagueDefensivePlayer() {
+        return leagueDefensivePlayer;
     }
 }
