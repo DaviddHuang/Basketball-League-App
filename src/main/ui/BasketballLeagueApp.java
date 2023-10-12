@@ -79,7 +79,8 @@ public class BasketballLeagueApp {
 
 
     // MODIFIES: this
-    // EFFECTS: takes a name from the user and creates a league with a name then continues with creating a team
+    // EFFECTS: takes a name from the user and creates a league with a name then continues with creating a team, if
+    //          user input enters a blank space, prompt invalid input and retry
     private void createLeague() {
         System.out.println("Please enter the name of your league: ");
         String name = input.next();
@@ -88,14 +89,15 @@ public class BasketballLeagueApp {
             funLeague = new League(name);
             System.out.println("League added: " + name);
             createTeam();
+        } else {
+            System.out.println("Invalid Input...");
+            createLeague();
         }
-        System.out.println("Invalid Input...");
-        createLeague();
     }
 
     // MODIFIES: this
     // EFFECTS: take a name from the user and creates a team with that name then adds it to the league then displays
-    //          team menu
+    //          team menu, if the user enters a blank space prompt invalid input and retry
     private void createTeam() {
         System.out.println("Please enter the name of a team: ");
         String name = input.next();
@@ -105,9 +107,10 @@ public class BasketballLeagueApp {
             System.out.println("Team added: " + name);
             funLeague.addTeam(funTeam);
             teamMenu();
+        } else {
+            System.out.println("Invalid input...");
+            createTeam();
         }
-        System.out.println("Invalid input...");
-        createTeam();
     }
 
     // MODIFIES: this
@@ -371,27 +374,28 @@ public class BasketballLeagueApp {
         System.out.println("Please enter the latest amount of games played for this player: ");
         int gamesPlayed = input.nextInt();
         myPlayer.playGame(points, rebounds, assists, steals,blocks, gamesPlayed);
-        funTeam.addPlayerInjuryReserve(myPlayer);
+        funTeam.addPlayerInjuryReserve();
         funTeam.movePlayerOffInjuryReserve();
         System.out.println("Player stats have been updated for player: " + myPlayer.getName());
         playerMenu();
     }
 
     // MODIFIES: this
-    // EFFECTS: checks if the roster is currently empty, display the current roster and prompts user to
-    //          select a player
+    // EFFECTS: checks if the roster and in injury reserve is currently empty, display the current roster and prompts
+    //          user to select a player
     private void isRosterEmptySelectPlayer() {
         if (funTeam.getRoster().isEmpty() && funTeam.getInjuryReserve().isEmpty()) {
             System.out.println("The roster is currently empty...");
             playerMenu();
         }
         displayRosterInfo();
+        displayInjuryReserve();
         selectPlayerInput();
     }
 
     // MODIFIES: this
-    // EFFECTS: checks if the roster is currently empty, display the current roster and prompts user to
-    //          remove a player
+    // EFFECTS: checks if the roster is currently empty, display the current roster and injury reserve and prompts user
+    //          to remove a player
     private void isRosterEmptyRemovePlayer() {
         if (funTeam.getRoster().isEmpty()) {
             System.out.println("The roster is currently empty...");

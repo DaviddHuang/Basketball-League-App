@@ -31,7 +31,7 @@ public class League {
     // MODIFIES: this
     // EFFECTS: removes a team with the given name, return true if removal was successful, otherwise return false
     // Code referenced from: https://github.students.cs.ubc.ca/CPSC210/ControlAndDataFlowProjects.git Hockey team
-    // util package, HockeyTeam class, method: insert()
+    // util package, HockeyTeam class, method: remove()
     public boolean removeTeam(String name) {
         for (Team t : league) {
             if (t.getTeamName().equalsIgnoreCase(name)) {

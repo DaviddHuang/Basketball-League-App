@@ -40,7 +40,7 @@ public class Team {
     }
 
     // MODIFIES: this
-    // EFFECTS: removes player with given name from roster and return true, otherwise return false
+    // EFFECTS: removes player with given name from roster or injury reserve and return true, otherwise return false
     // Code referenced from: https://github.students.cs.ubc.ca/CPSC210/ControlAndDataFlowProjects.git Hockey team
     // util package, HockeyTeam class, method: remove()
     public boolean removePlayer(String name) {
@@ -63,7 +63,7 @@ public class Team {
     // MODIFIES: this
     // EFFECTS: checks if each player is healthy, if they are not remove them from roster and add to injury reserve
     //          return true if successful, otherwise return false
-    public boolean addPlayerInjuryReserve(Player player) {
+    public boolean addPlayerInjuryReserve() {
         for (Player p : roster) {
             if (p.getHealthStatus() == false) {
                 roster.remove(p);

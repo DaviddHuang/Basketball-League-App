@@ -3,8 +3,6 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TeamTest {
@@ -75,7 +73,7 @@ public class TeamTest {
     void testRemovePlayerInjured() {
         testTeam.addPlayer(testPlayer1);
         testPlayer1.isPlayerHealthy(false);
-        testTeam.addPlayerInjuryReserve(testPlayer1);
+        testTeam.addPlayerInjuryReserve();
         assertEquals(1, testTeam.getInjuryReserve().size());
         testTeam.removePlayer("Lebron James");
         assertEquals(0, testTeam.getInjuryReserve().size());
@@ -88,8 +86,8 @@ public class TeamTest {
         testTeam.addPlayer(testPlayer2);
         testPlayer1.isPlayerHealthy(false);
         testPlayer2.isPlayerHealthy(false);
-        testTeam.addPlayerInjuryReserve(testPlayer1);
-        testTeam.addPlayerInjuryReserve(testPlayer2);
+        testTeam.addPlayerInjuryReserve();
+        testTeam.addPlayerInjuryReserve();
         assertEquals(2, testTeam.getInjuryReserve().size());
         testTeam.removePlayer("Lebron James");
         testTeam.removePlayer("Kevin Durant");
@@ -101,7 +99,7 @@ public class TeamTest {
     void testRemovePlayerInjuredFail() {
         testTeam.addPlayer(testPlayer1);
         testPlayer1.isPlayerHealthy(false);
-        testTeam.addPlayerInjuryReserve(testPlayer1);
+        testTeam.addPlayerInjuryReserve();
         assertEquals(1, testTeam.getInjuryReserve().size());
         assertFalse(testTeam.removePlayer("Steph Curry"));
         assertEquals(1, testTeam.getInjuryReserve().size());
@@ -149,7 +147,7 @@ public class TeamTest {
         testTeam.addPlayer(testPlayer1);
         testTeam.addPlayer(testPlayer2);
         testPlayer1.isPlayerHealthy(false);
-        testTeam.addPlayerInjuryReserve(testPlayer1);
+        testTeam.addPlayerInjuryReserve();
         assertEquals(1, testTeam.getRoster().size());
         assertEquals(1, testTeam.getInjuryReserve().size());
         assertTrue(testTeam.getRoster().contains(testPlayer2));
@@ -162,8 +160,8 @@ public class TeamTest {
         testTeam.addPlayer(testPlayer2);
         testPlayer1.isPlayerHealthy(false);
         testPlayer2.isPlayerHealthy(false);
-        testTeam.addPlayerInjuryReserve(testPlayer1);
-        testTeam.addPlayerInjuryReserve(testPlayer2);
+        testTeam.addPlayerInjuryReserve();
+        testTeam.addPlayerInjuryReserve();
         assertEquals(2, testTeam.getInjuryReserve().size());
         assertTrue(testTeam.getInjuryReserve().contains(testPlayer1));
         assertTrue(testTeam.getInjuryReserve().contains(testPlayer2));
@@ -173,14 +171,14 @@ public class TeamTest {
     void testAddInjuryReserveFail() {
         testTeam.addPlayer(testPlayer1);
         testPlayer1.isPlayerHealthy(true);
-        assertFalse(testTeam.addPlayerInjuryReserve(testPlayer1));
+        assertFalse(testTeam.addPlayerInjuryReserve());
     }
 
     @Test
     void testMovePlayerOffInjuryReserve() {
         testTeam.addPlayer(testPlayer1);
         testPlayer1.isPlayerHealthy(false);
-        testTeam.addPlayerInjuryReserve(testPlayer1);
+        testTeam.addPlayerInjuryReserve();
         assertTrue(testTeam.getInjuryReserve().contains(testPlayer1));
         assertEquals(1, testTeam.getInjuryReserve().size());
         testPlayer1.isPlayerHealthy(true);
@@ -193,7 +191,7 @@ public class TeamTest {
     void testMovePlayerOffInjuryReserveFail() {
         testTeam.addPlayer(testPlayer1);
         testPlayer1.isPlayerHealthy(false);
-        testTeam.addPlayerInjuryReserve(testPlayer1);
+        testTeam.addPlayerInjuryReserve();
         assertFalse(testTeam.movePlayerOffInjuryReserve());
     }
 
