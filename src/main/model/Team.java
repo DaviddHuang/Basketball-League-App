@@ -104,12 +104,6 @@ public class Team {
                     leader = p;
                 }
             }
-
-            for (Player p : injuryReserve) {
-                if (leader.mvpScore() < p.mvpScore()) {
-                    leader = p;
-                }
-            }
             scoringLeader.clear();
             scoringLeader.add(leader);
             return true;
@@ -121,16 +115,10 @@ public class Team {
     // EFFECTS: calculates which player has the highest dpoy score, and adds the calculated dpoy to the dpoy list,
     //          return true if successful, otherwise return false
     public boolean calculateDefensivePlayer() {
-        while (!roster.isEmpty() || !injuryReserve.isEmpty()) {
+        while (!roster.isEmpty()) {
             Player leader = roster.get(0);
 
             for (Player p : roster) {
-                if (leader.dpoyScore() < p.dpoyScore()) {
-                    leader = p;
-                }
-            }
-
-            for (Player p : injuryReserve) {
                 if (leader.dpoyScore() < p.dpoyScore()) {
                     leader = p;
                 }

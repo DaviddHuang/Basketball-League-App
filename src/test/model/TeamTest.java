@@ -231,20 +231,6 @@ public class TeamTest {
     }
 
     @Test
-    void testCalculateMostValuablePlayerInjured() {
-        testPlayer1.playGame(1,1,1,1,1,1);
-        testPlayer2.playGame(2,2,2,2,2,2);
-        testTeam.addPlayer(testPlayer1);
-        testTeam.addPlayer(testPlayer2);
-        testPlayer1.isPlayerHealthy(false);
-        testPlayer2.isPlayerHealthy(false);
-        assertTrue(testTeam.addPlayerInjuryReserve());
-        assertTrue(testTeam.addPlayerInjuryReserve());
-        assertEquals(0, testTeam.getRoster().size());
-        assertTrue(testTeam.calculateMostValuablePlayer());
-    }
-
-    @Test
     void testCalculateMostValuablePlayerFail() {
         assertFalse(testTeam.calculateMostValuablePlayer());
     }
