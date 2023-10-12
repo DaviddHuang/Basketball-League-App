@@ -92,4 +92,36 @@ public class LeagueTest {
         assertTrue(testLeague.calculateLeagueMostValuablePlayer());
         assertTrue(testLeague.getLeagueMostValuablePlayer().contains(testPlayer1));
     }
+
+    @Test
+    void testCalculateLeagueMostValuablePlayerNoLeague() {
+        assertFalse(testLeague.calculateLeagueMostValuablePlayer());
+    }
+
+    @Test
+    void testCalculateLeagueDefensivePlayer() {
+        testLeague.addTeam(testTeam2);
+        testLeague.addTeam(testTeam1);
+        testTeam1.addPlayer(testPlayer1);
+        testTeam2.addPlayer(testPlayer2);
+        testPlayer1.playGame(100,100,100,100,100,1);
+        testPlayer2.playGame(1,1,1,1,1,1);
+        assertTrue(testTeam1.calculateDefensivePlayer());
+        assertTrue(testTeam2.calculateDefensivePlayer());
+        assertTrue(testTeam1.getDefensiveLeader().contains(testPlayer1));
+        assertTrue(testTeam2.getDefensiveLeader().contains(testPlayer2));
+        assertTrue(testLeague.calculateLeagueDefensivePlayer());
+        assertTrue(testLeague.getLeagueDefensivePlayer().contains(testPlayer1));
+    }
+
+    @Test
+    void testCalculateLeagueDefensivePlayerNoLeague() {
+        assertFalse(testLeague.calculateLeagueDefensivePlayer());
+    }
+
+    @Test
+    void testLeagueStatus() {
+        testLeague.leagueStatus(false);
+        assertFalse(testLeague.getLeagueStatus());
+    }
 }

@@ -110,4 +110,8 @@ public class League {
     public List<Player> getLeagueDefensivePlayer() {
         return leagueDefensivePlayer;
     }
+
+    public boolean getLeagueStatus() {
+        return seasonNotOver;
+    }
 }

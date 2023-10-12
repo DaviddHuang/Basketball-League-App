@@ -231,6 +231,20 @@ public class TeamTest {
     }
 
     @Test
+    void testCalculateMostValuablePlayerInjured() {
+        testPlayer1.playGame(1,1,1,1,1,1);
+        testPlayer2.playGame(2,2,2,2,2,2);
+        testTeam.addPlayer(testPlayer1);
+        testTeam.addPlayer(testPlayer2);
+        testPlayer1.isPlayerHealthy(false);
+        testPlayer2.isPlayerHealthy(false);
+        assertTrue(testTeam.addPlayerInjuryReserve());
+        assertTrue(testTeam.addPlayerInjuryReserve());
+        assertEquals(0, testTeam.getRoster().size());
+        assertTrue(testTeam.calculateMostValuablePlayer());
+    }
+
+    @Test
     void testCalculateMostValuablePlayerFail() {
         assertFalse(testTeam.calculateMostValuablePlayer());
     }
@@ -241,7 +255,7 @@ public class TeamTest {
         testTeam.addPlayer(testPlayer1);
         assertEquals(1, testTeam.getRoster().size());
         assertTrue(testTeam.calculateDefensivePlayer());
-        assertEquals(0, testTeam.getRoster().size());
+        assertEquals(1, testTeam.getRoster().size());
         assertEquals(1, testTeam.getDefensiveLeader().size());
         assertTrue(testTeam.getDefensiveLeader().contains(testPlayer1));
     }
@@ -254,7 +268,7 @@ public class TeamTest {
         testTeam.addPlayer(testPlayer2);
         assertEquals(2, testTeam.getRoster().size());
         assertTrue(testTeam.calculateDefensivePlayer());
-        assertEquals(1, testTeam.getRoster().size());
+        assertEquals(2, testTeam.getRoster().size());
         assertEquals(1, testTeam.getDefensiveLeader().size());
         assertTrue(testTeam.getDefensiveLeader().contains(testPlayer2));
     }

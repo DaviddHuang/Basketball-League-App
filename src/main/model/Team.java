@@ -96,7 +96,7 @@ public class Team {
     // EFFECTS: calculates which player has the highest mvp score, and adds the calculated mvp to the mvp list, return
     //          true if successful, otherwise return false
     public boolean calculateMostValuablePlayer() {
-        while (!roster.isEmpty() || !injuryReserve.isEmpty()) {
+        if (!roster.isEmpty()) {
             Player leader = roster.get(0);
 
             for (Player p : roster) {
