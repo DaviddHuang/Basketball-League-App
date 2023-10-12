@@ -93,6 +93,16 @@ public class Player {
         this.gamesPlayed += gamesPlayed;
     }
 
+    // EFFECTS: returns the score used for calculating the MVP
+    public int mvpScore() {
+        return this.points + this.rebounds + this.assists + this.steals + this.blocks;
+    }
+
+    // EFFECTS: return the score used for calculating the defensive player of the year
+    public int dpoyScore() {
+        return this.steals + this.blocks;
+    }
+
     // MODIFIES: this
     // EFFECTS: sets players health status to given status
     public void isPlayerHealthy(Boolean status) {

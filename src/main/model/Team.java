@@ -11,10 +11,12 @@ public class Team {
     private int teamGamesPlayed;
     private String name;
     private List<Player> injuryReserve;
+    private List<Player> scoringLeader;
+    private List<Player> defensiveLeader;
 
     // MODIFIES: this
-    // EFFECTS: constructs a team with a name, 0 wins, 0 losses, 0 games played, an empty roster, and empty injury
-    //          reserve
+    // EFFECTS: constructs a team with a name, 0 wins, 0 losses, 0 games played, an empty roster, empty injury
+    //          reserve, and empty list of statistical team leaders
     public Team(String name) {
         this.name = name;
         wins = 0;
@@ -22,6 +24,8 @@ public class Team {
         teamGamesPlayed = 0;
         roster = new ArrayList<>();
         injuryReserve = new ArrayList<>();
+        scoringLeader = new ArrayList<>();
+        defensiveLeader = new ArrayList<>();
     }
 
     // MODIFIES: this
@@ -88,6 +92,42 @@ public class Team {
         return false;
     }
 
+    // MODIFIES: this
+    // EFFECTS: calculates which player has the highest mvp score, and adds the calculated mvp to the mvp list
+    public boolean calculateMostValuablePlayer() {
+        while (!roster.isEmpty()) {
+            Player leader = roster.get(0);
+
+            for (Player p : roster) {
+                if (leader.mvpScore() < p.mvpScore()) {
+                    leader = p;
+                }
+            }
+            roster.remove(leader);
+            scoringLeader.add(leader);
+            return true;
+        }
+        return false;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: calculates which player has the highest dpoy score, and adds the calculated dpoy to the dpoy list
+    public boolean calculateDefensivePlayer() {
+        while (!roster.isEmpty()) {
+            Player leader = roster.get(0);
+
+            for (Player p : roster) {
+                if (leader.dpoyScore() < p.dpoyScore()) {
+                    leader = p;
+                }
+            }
+            roster.remove(leader);
+            defensiveLeader.add(leader);
+            return true;
+        }
+        return false;
+    }
+
     // EFFECTS: calculates the win percentage of a team
     public double winPercentage() {
         if (teamGamesPlayed == 0) {
@@ -148,5 +188,13 @@ public class Team {
 
     public List<Player> getInjuryReserve() {
         return this.injuryReserve;
+    }
+
+    public List<Player> getScoringLeader() {
+        return this.scoringLeader;
+    }
+
+    public List<Player> getDefensiveLeader() {
+        return this.defensiveLeader;
     }
 }

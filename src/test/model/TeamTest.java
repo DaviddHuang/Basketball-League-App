@@ -10,6 +10,7 @@ public class TeamTest {
     private Player testPlayer1;
     private Player testPlayer2;
     private Player testPlayer3;
+    private Player testPlayer4;
 
     @BeforeEach
     void setup(){
@@ -17,6 +18,7 @@ public class TeamTest {
         testPlayer1 = new Player("Lebron James","SF" ,23, 195, 230.3);
         testPlayer2 = new Player("Kevin Durant", "SF",35, 202, 201.7);
         testPlayer3 = new Player("Ducky", "C",23, 201, 201.9);
+        testPlayer4 = new Player("Stephen Curry", "PG", 30, 190, 185.0);
     }
 
     @Test
@@ -198,5 +200,67 @@ public class TeamTest {
     @Test
     void testMovePlayerOffInjuryReserveNoPlayers() {
         assertFalse(testTeam.movePlayerOffInjuryReserve());
+    }
+
+    @Test
+    void testCalculateMostValuablePlayer() {
+        testPlayer1.playGame(1,1,1,1,1,1);
+        testPlayer2.playGame(2,2,2,2,2,2);
+        testTeam.addPlayer(testPlayer1);
+        testTeam.addPlayer(testPlayer2);
+        assertEquals(2, testTeam.getRoster().size());
+        testTeam.calculateMostValuablePlayer();
+        assertEquals(1, testTeam.getRoster().size());
+        assertEquals(1, testTeam.getScoringLeader().size());
+        assertTrue(testTeam.getScoringLeader().contains(testPlayer2));
+    }
+
+    @Test
+    void testCalculateMostValuablePlayerMultiple() {
+        testPlayer1.playGame(1,1,1,1,1,1);
+        testPlayer2.playGame(50,100,99,10,10,1);
+        testPlayer4.playGame(50,99,99,10,10,1);
+        testTeam.addPlayer(testPlayer1);
+        testTeam.addPlayer(testPlayer2);
+        testTeam.addPlayer(testPlayer4);
+        assertEquals(3, testTeam.getRoster().size());
+        assertTrue(testTeam.calculateMostValuablePlayer());
+        assertEquals(2, testTeam.getRoster().size());
+        assertEquals(1, testTeam.getScoringLeader().size());
+        assertTrue(testTeam.getScoringLeader().contains(testPlayer2));
+    }
+
+    @Test
+    void testCalculateMostValuablePlayerFail() {
+        assertFalse(testTeam.calculateMostValuablePlayer());
+    }
+
+    @Test
+    void testCalculateDefensivePlayer() {
+        testPlayer1.playGame(1,1,1,1,1,1);
+        testTeam.addPlayer(testPlayer1);
+        assertEquals(1, testTeam.getRoster().size());
+        assertTrue(testTeam.calculateDefensivePlayer());
+        assertEquals(0, testTeam.getRoster().size());
+        assertEquals(1, testTeam.getDefensiveLeader().size());
+        assertTrue(testTeam.getDefensiveLeader().contains(testPlayer1));
+    }
+
+    @Test
+    void testCalculateDefensivePlayerMultiple() {
+        testPlayer1.playGame(1,1,1,2,1,1);
+        testPlayer2.playGame(1,1,1,1,1,1);
+        testTeam.addPlayer(testPlayer1);
+        testTeam.addPlayer(testPlayer2);
+        assertEquals(2, testTeam.getRoster().size());
+        assertTrue(testTeam.calculateDefensivePlayer());
+        assertEquals(1, testTeam.getRoster().size());
+        assertEquals(1, testTeam.getDefensiveLeader().size());
+        assertTrue(testTeam.getDefensiveLeader().contains(testPlayer1));
+    }
+
+    @Test
+    void testCalculateDefensivePlayerFail() {
+        assertFalse(testTeam.calculateDefensivePlayer());
     }
 }

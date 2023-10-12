@@ -116,4 +116,16 @@ class PlayerTest {
         testPlayer.isPlayerHealthy(false);
         assertFalse(testPlayer.getHealthStatus());
     }
+
+    @Test
+    void testMvpScore() {
+        testPlayer.playGame(1,1,1,1,1,1);
+        assertEquals(5, testPlayer.mvpScore());
+    }
+
+    @Test
+    void testDpoyScore() {
+        testPlayer.playGame(1,1,1,1,1,1);
+        assertEquals(2, testPlayer.dpoyScore());
+    }
 }
