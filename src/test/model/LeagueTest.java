@@ -140,4 +140,15 @@ public class LeagueTest {
     void testCalculateLeagueWinnerFail() {
         assertFalse(testLeague.calculateLeagueWinner());
     }
+
+    @Test
+    void testCalculateLeagueWinnerSecondTeamMostWins() {
+        testLeague.addTeam(testTeam1);
+        testLeague.addTeam(testTeam2);
+        testTeam1.teamRecord(30,52);
+        testTeam2.teamRecord(73,9);
+        assertTrue(testLeague.calculateLeagueWinner());
+        assertTrue(testLeague.getLeagueWinner().contains(testTeam2));
+        assertFalse(testLeague.getLeagueWinner().contains(testTeam1));
+    }
 }

@@ -60,7 +60,7 @@ public class League {
             Player mvp = league.get(0).getScoringLeader().get(0);
 
             for (Team t : league) {
-                if (mvp.mvpScore() <= t.getScoringLeader().get(0).mvpScore()) {
+                if (mvp.mvpScore() < t.getScoringLeader().get(0).mvpScore()) {
                     mvp = t.getScoringLeader().get(0);
 
                 }
@@ -79,7 +79,7 @@ public class League {
             Player dpoy = league.get(0).getDefensiveLeader().get(0);
 
             for (Team t : league) {
-                if (dpoy.dpoyScore() <= t.getDefensiveLeader().get(0).dpoyScore()) {
+                if (dpoy.dpoyScore() < t.getDefensiveLeader().get(0).dpoyScore()) {
                     dpoy = t.getDefensiveLeader().get(0);
 
                 }

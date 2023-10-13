@@ -118,7 +118,7 @@ public class Team {
             Player leader = roster.get(0);
 
             for (Player p : roster) {
-                if (leader.dpoyScore() <= p.dpoyScore()) {
+                if (leader.dpoyScore() < p.dpoyScore()) {
                     leader = p;
                 }
             }
