@@ -9,14 +9,17 @@ public class League {
     private boolean seasonNotOver;
     private List<Player> leagueMostValuablePlayer;
     private List<Player> leagueDefensivePlayer;
+    private List<Team> leagueWinner;
 
-    // EFFECTS: constructs a league with a name, empty list of teams, and season status set to true
+    // EFFECTS: constructs a league with a name, empty list of teams, empty list of mvp's, empty list of defensive
+    //          players, empty list of league winners, and season is still ongoing
     public League(String name) {
         this.name = name;
         this.league = new ArrayList<>();
         this.seasonNotOver = true;
         this.leagueMostValuablePlayer = new ArrayList<>();
         this.leagueDefensivePlayer = new ArrayList<>();
+        this.leagueWinner = new ArrayList<>();
 
     }
 
@@ -50,14 +53,14 @@ public class League {
     }
 
     // MODIFIES: this
-    // EFFECTS: takes the scoring leader from each team and compares their MVP score, the player with the highest MVP
-    //          score becomes MVP and is added to the mvp list. Return true if successful, otherwise return false
+    // EFFECTS: calculates the scoring leading from every team and adds them to mvp list, return true if successful else
+    //          return false
     public boolean calculateLeagueMostValuablePlayer() {
         while (!league.isEmpty()) {
             Player mvp = league.get(0).getScoringLeader().get(0);
 
             for (Team t : league) {
-                if (mvp.mvpScore() < t.getScoringLeader().get(0).mvpScore()) {
+                if (mvp.mvpScore() <= t.getScoringLeader().get(0).mvpScore()) {
                     mvp = t.getScoringLeader().get(0);
 
                 }
@@ -68,17 +71,38 @@ public class League {
         return false;
     }
 
+    // MODIFIES: this
+    // EFFECTS: calculates the defensive leader from every team and adds them to the defensive player list, return true
+    //          if successful else return false
     public boolean calculateLeagueDefensivePlayer() {
         while (!league.isEmpty()) {
             Player dpoy = league.get(0).getDefensiveLeader().get(0);
 
             for (Team t : league) {
-                if (dpoy.dpoyScore() < t.getDefensiveLeader().get(0).dpoyScore()) {
+                if (dpoy.dpoyScore() <= t.getDefensiveLeader().get(0).dpoyScore()) {
                     dpoy = t.getDefensiveLeader().get(0);
 
                 }
             }
             leagueDefensivePlayer.add(dpoy);
+            return true;
+        }
+        return false;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: calculates the league winner from all team and adds the winner to winner list, return true if successful
+    //          otherwise return false
+    public boolean calculateLeagueWinner() {
+        while (!league.isEmpty()) {
+            Team winner = league.get(0);
+
+            for (Team t : league) {
+                if (winner.getWins() < t.getWins()) {
+                    winner = t;
+                }
+            }
+            leagueWinner.add(winner);
             return true;
         }
         return false;
@@ -111,7 +135,12 @@ public class League {
         return leagueDefensivePlayer;
     }
 
+    public List<Team> getLeagueWinner() {
+        return leagueWinner;
+    }
+
     public boolean getLeagueStatus() {
         return seasonNotOver;
     }
+
 }

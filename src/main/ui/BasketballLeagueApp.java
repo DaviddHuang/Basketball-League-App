@@ -284,9 +284,18 @@ public class BasketballLeagueApp {
         }
     }
 
+    // EFFECTS: displays the league DPOY
     private void displayLeagueDefensivePlayer() {
         for (Player p : funLeague.getLeagueDefensivePlayer()) {
             System.out.println("League DPOY: " + p.getName());
+        }
+    }
+
+    // EFFECTS: displays the league winner
+    private void displayLeagueWinner() {
+        for (Team t : funLeague.getLeagueWinner()) {
+            System.out.println("League Winner: " + t.getTeamName() + " ||" + " Wins: " + t.getWins() + " ||"
+                    + " Losses: " + t.getLosses() + " ||" + " PCT: " + t.winPercentage());
         }
     }
 
@@ -438,8 +447,14 @@ public class BasketballLeagueApp {
     // MODIFIES: this
     // EFFECTS: sets the league status to false and prints the MVP, DPOY, and exits the application
     private void endSeason() {
+        if (funLeague.getAmountOfTeams() == 0) {
+            System.out.println("There are no teams in the league. Season cannot end!");
+            teamMenu();
+        }
         funLeague.leagueStatus(false);
         System.out.println("Congratulations! The season has ended!");
+        funLeague.calculateLeagueWinner();
+        displayLeagueWinner();
         funLeague.calculateLeagueMostValuablePlayer();
         displayLeagueMostValuablePlayer();
         funLeague.calculateLeagueDefensivePlayer();

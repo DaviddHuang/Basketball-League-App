@@ -104,7 +104,6 @@ public class Team {
                     leader = p;
                 }
             }
-            scoringLeader.clear();
             scoringLeader.add(leader);
             return true;
         }
@@ -119,11 +118,10 @@ public class Team {
             Player leader = roster.get(0);
 
             for (Player p : roster) {
-                if (leader.dpoyScore() < p.dpoyScore()) {
+                if (leader.dpoyScore() <= p.dpoyScore()) {
                     leader = p;
                 }
             }
-            defensiveLeader.clear();
             defensiveLeader.add(leader);
             return true;
         }
