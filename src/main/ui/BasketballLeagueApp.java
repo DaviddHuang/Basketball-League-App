@@ -165,6 +165,7 @@ public class BasketballLeagueApp {
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: displays options that a user has when interacting with a player
     // Code referenced from https://github.students.cs.ubc.ca/CPSC210/TellerApp.git from the tellerApp class in the ui
     // package, method: runTeller()
@@ -195,6 +196,7 @@ public class BasketballLeagueApp {
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: displays options that a user has when interacting with a team
     // Code referenced from https://github.students.cs.ubc.ca/CPSC210/TellerApp.git from the tellerApp class in the ui
     // package method: runTeller()
@@ -465,8 +467,7 @@ public class BasketballLeagueApp {
 
     // REQUIRES: jersey >= 0
     // MODIFIES: this
-    // EFFECTS: checks if players on the roster have same jersey as the given jersey, create a new player if the
-    //          jersey's match
+    // EFFECTS: prompt create player menu if a player's jersey matches given jersey
     private void checkSameJersey(int jersey) {
         for (Player p : funTeam.getRoster()) {
             if (p.getJerseyNumber() == jersey) {
