@@ -255,6 +255,8 @@ public class BasketballLeagueApp {
             System.out.println("The league is currently empty...");
             return;
         }
+        System.out.println("League: " + funLeague.getLeagueName());
+        System.out.println("-----------------------------------");
         System.out.println("Current Teams: ");
         for (Team t : funLeague.getTeams()) {
             System.out.println("Team: " + t.getTeamName() + " ||" + " Wins: " + t.getWins() + " ||" + " Losses: "
