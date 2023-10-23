@@ -3,17 +3,27 @@ package ui;
 import model.League;
 import model.Player;
 import model.Team;
+import persistence.Reader;
+import persistence.Writer;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 // Basketball league application
 public class BasketballLeagueApp {
+    private static final String FILE_DIRECTORY = "./data/league.json";
     private Scanner input;
     private Team funTeam;
     private League funLeague;
     private Player myPlayer;
+    private Writer writer;
+    private Reader reader;
 
     public BasketballLeagueApp() {
+        funLeague = new League("My League");
+        writer = new Writer(FILE_DIRECTORY);
+        reader = new Reader(FILE_DIRECTORY);
         startApp();
     }
 
@@ -24,6 +34,7 @@ public class BasketballLeagueApp {
     private void startApp() {
         boolean notOver = true;
         String userInput = null;
+        funTeam = null;
 
         initializeLeague();
 
@@ -37,7 +48,6 @@ public class BasketballLeagueApp {
 
             if (userInput.equals("quit")) {
                 notOver = false;
-                break;
             } else {
                 readInputs(userInput);
             }
@@ -52,6 +62,8 @@ public class BasketballLeagueApp {
     // package, method: displayMenu()
     private void startMenu() {
         System.out.println("Type 'Start' to create your own league: ");
+        System.out.println("Type 'Save' to save your league");
+        System.out.println("Type 'Load' to load your league");
         System.out.println("Type 'Quit' to exit now: ");
     }
 
@@ -62,6 +74,12 @@ public class BasketballLeagueApp {
     private void readInputs(String userInput) {
         if (userInput.equals("start")) {
             createLeague();
+        } else if (userInput.equals("save")) {
+            saveLeague();
+            startMenu();
+        } else if (userInput.equals("load")) {
+            loadLeague();
+            teamMenu();
         } else {
             System.out.println("Invalid input, please try again.\n");
             startMenu();
@@ -284,14 +302,22 @@ public class BasketballLeagueApp {
     // EFFECTS: displays the league MVP
     private void displayLeagueMostValuablePlayer() {
         for (Player p : funLeague.getLeagueMostValuablePlayer()) {
-            System.out.println("League MVP: " + p.getName());
+            System.out.println("League MVP: " + p.getName() + " ||" + " Position: " + p.getPosition() + " ||"
+                    + " #: " + p.getJerseyNumber() + " ||" + " Height: " + p.getHeight() + "cm"
+                    + " ||" + " Weight: " + p.getWeight() + "lbs" + " ||" + " PPG: " + p.averagePoints() + " ||"
+                    + " RPG: " + p.averageRebounds() + " ||" + " APG: " + p.averageAssists() + " ||" + " SPG: "
+                    + p.averageSteals() + " ||" + " BPG: " + p.averageBlocks() + " ||" + " GP: " + p.getGamesPlayed());
         }
     }
 
     // EFFECTS: displays the league DPOY
     private void displayLeagueDefensivePlayer() {
         for (Player p : funLeague.getLeagueDefensivePlayer()) {
-            System.out.println("League DPOY: " + p.getName());
+            System.out.println("League DPOY: " + p.getName() + " ||" + " Position: " + p.getPosition() + " ||"
+                    + " #: " + p.getJerseyNumber() + " ||" + " Height: " + p.getHeight() + "cm"
+                    + " ||" + " Weight: " + p.getWeight() + "lbs" + " ||" + " PPG: " + p.averagePoints() + " ||"
+                    + " RPG: " + p.averageRebounds() + " ||" + " APG: " + p.averageAssists() + " ||" + " SPG: "
+                    + p.averageSteals() + " ||" + " BPG: " + p.averageBlocks() + " ||" + " GP: " + p.getGamesPlayed());
         }
     }
 
@@ -403,10 +429,10 @@ public class BasketballLeagueApp {
         System.out.println("Please enter the latest amount of games played for this player: ");
         int gamesPlayed = input.nextInt();
         myPlayer.playGame(points, rebounds, assists, steals,blocks, gamesPlayed);
-        funTeam.calculateMostValuablePlayer();
-        funTeam.calculateDefensivePlayer();
         funTeam.addPlayerInjuryReserve();
         funTeam.movePlayerOffInjuryReserve();
+        funTeam.calculateMostValuablePlayer();
+        funTeam.calculateDefensivePlayer();
         System.out.println("Player stats have been updated for player: " + myPlayer.getName());
         playerMenu();
     }
@@ -494,6 +520,10 @@ public class BasketballLeagueApp {
 
     // EFFECTS: prints prompt if user tries to continue with no teams in the league
     private void continueWithNoTeam() {
+        if (funTeam == null) {
+            System.out.println("There is no team currently selected.");
+            teamMenu();
+        }
         if (funLeague.getTeams().isEmpty()) {
             System.out.println("Cannot proceed if there are no teams. Please add a team to continue.");
             teamMenu();
@@ -515,5 +545,28 @@ public class BasketballLeagueApp {
     private void organizeTeamMenu() {
         System.out.println("Invalid Selection...");
         teamMenu();
+    }
+
+    // EFFECTS: saves the league to file
+    private void saveLeague() {
+        try {
+            writer.open();
+            writer.write(funLeague);
+            writer.closeWriter();
+            System.out.println("Successfully saved: " + funLeague.getLeagueName() + " to " + FILE_DIRECTORY);
+        } catch (FileNotFoundException e) {
+            System.out.println("File could not be written: " + FILE_DIRECTORY);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads league from file
+    private void loadLeague() {
+        try {
+            funLeague = reader.read();
+            System.out.println("Successfully loaded: " + funLeague.getLeagueName() + " from " + FILE_DIRECTORY);
+        } catch (IOException e) {
+            System.out.println("File could not be read: " + FILE_DIRECTORY);
+        }
     }
 }

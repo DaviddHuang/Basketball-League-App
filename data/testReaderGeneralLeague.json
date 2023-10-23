@@ -1,0 +1,121 @@
+{
+  "League MVP": [],
+  "League name": "NBA",
+  "Teams": [
+    {
+      "Team name": "Vancouver Grizzlies",
+      "Losses": 8,
+      "Roster": [
+        {
+          "Steals": 82,
+          "Points": 2432,
+          "Assists": 987,
+          "Blocks": 105,
+          "Health status": true,
+          "Number": 30,
+          "Position": "PG",
+          "Height": 188,
+          "Rebounds": 654,
+          "Games played": 82,
+          "Weight": 205,
+          "Name": "Stephen Curry"
+        },
+        {
+          "Steals": 0,
+          "Points": 0,
+          "Assists": 0,
+          "Blocks": 0,
+          "Health status": true,
+          "Number": 23,
+          "Position": "SF",
+          "Height": 205,
+          "Rebounds": 0,
+          "Games played": 0,
+          "Weight": 255.0,
+          "Name": "Lebron James"
+        }
+      ],
+      "Defensive leader": [{
+        "Steals": 82,
+        "Points": 2432,
+        "Assists": 987,
+        "Blocks": 105,
+        "Health status": true,
+        "Number": 30,
+        "Position": "PG",
+        "Height": 188,
+        "Rebounds": 654,
+        "Games played": 82,
+        "Weight": 205,
+        "Name": "Stephen Curry"
+      }],
+      "Injury reserve": [],
+      "Scoring leader": [{
+        "Steals": 82,
+        "Points": 2432,
+        "Assists": 987,
+        "Blocks": 105,
+        "Health status": true,
+        "Number": 30,
+        "Position": "PG",
+        "Height": 188,
+        "Rebounds": 654,
+        "Games played": 82,
+        "Weight": 205,
+        "Name": "Stephen Curry"
+      }],
+      "Games played": 82,
+      "Wins": 74
+    },
+    {
+      "Team name": "Toronto Raptors",
+      "Losses": 42,
+      "Roster": [{
+        "Steals": 94,
+        "Points": 199,
+        "Assists": 231,
+        "Blocks": 85,
+        "Health status": true,
+        "Number": 0,
+        "Position": "PG",
+        "Height": 182,
+        "Rebounds": 374,
+        "Games played": 84,
+        "Weight": 255,
+        "Name": "Kyle Lowry"
+      }],
+      "Defensive leader": [{
+        "Steals": 94,
+        "Points": 199,
+        "Assists": 231,
+        "Blocks": 85,
+        "Health status": true,
+        "Number": 0,
+        "Position": "PG",
+        "Height": 182,
+        "Rebounds": 374,
+        "Games played": 84,
+        "Weight": 255,
+        "Name": "Kyle Lowry"
+      }],
+      "Injury reserve": [],
+      "Scoring leader": [{
+        "Steals": 94,
+        "Points": 199,
+        "Assists": 231,
+        "Blocks": 85,
+        "Health status": true,
+        "Number": 0,
+        "Position": "PG",
+        "Height": 182,
+        "Rebounds": 374,
+        "Games played": 84,
+        "Weight": 255,
+        "Name": "Kyle Lowry"
+      }],
+      "Games played": 82,
+      "Wins": 40
+    }
+  ],
+  "League DPOY": []
+}

@@ -1,10 +1,14 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.*;
 
 // Represents a basketball team with a list of players on the time, amount of wins, losses, win percentage, and
 // games played
-public class Team {
+public class Team implements Writable {
     private List<Player> roster;
     private int wins;
     private int losses;
@@ -104,6 +108,7 @@ public class Team {
                     leader = p;
                 }
             }
+            scoringLeader.clear();
             scoringLeader.add(leader);
             return true;
         }
@@ -122,6 +127,7 @@ public class Team {
                     leader = p;
                 }
             }
+            defensiveLeader.clear();
             defensiveLeader.add(leader);
             return true;
         }
@@ -160,6 +166,60 @@ public class Team {
         teamGamesPlayed++;
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("Team name", name);
+        json.put("Wins", wins);
+        json.put("Losses", losses);
+        json.put("Games played", teamGamesPlayed);
+        json.put("Roster", playersToJson());
+        json.put("Injury reserve", injuryReservePlayersToJson());
+        json.put("Scoring leader", scoringLeaderToJson());
+        json.put("Defensive leader", defensiveLeaderToJson());
+        return json;
+    }
+
+    // EFFECTS: returns players in the team as a JSON array
+    private JSONArray playersToJson() {
+        JSONArray array = new JSONArray();
+
+        for (Player p : roster) {
+            array.put(p.toJson());
+        }
+        return array;
+    }
+
+    // EFFECTS: returns injured players in the team as a JSON array
+    private JSONArray injuryReservePlayersToJson() {
+        JSONArray array = new JSONArray();
+
+        for (Player p : injuryReserve) {
+            array.put(p.toJson());
+        }
+        return array;
+    }
+
+    // EFFECTS: returns scoring leaders in the team as a JSON array
+    private JSONArray scoringLeaderToJson() {
+        JSONArray array = new JSONArray();
+
+        for (Player p : scoringLeader) {
+            array.put(p.toJson());
+        }
+        return array;
+    }
+
+    // EFFECTS: returns defensive leaders in the team as a JSON array
+    private JSONArray defensiveLeaderToJson() {
+        JSONArray array = new JSONArray();
+
+        for (Player p : defensiveLeader) {
+            array.put(p.toJson());
+        }
+        return array;
+    }
+
     // getters
 
     public List<Player> getRoster() {
@@ -174,12 +234,24 @@ public class Team {
         return wins;
     }
 
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
     public int getLosses() {
         return losses;
     }
 
+    public void setLosses(int losses) {
+        this.losses = losses;
+    }
+
     public int getTeamGamesPlayed() {
         return teamGamesPlayed;
+    }
+
+    public void setTeamGamesPlayed(int gamesPlayed) {
+        this.teamGamesPlayed = gamesPlayed;
     }
 
     public String getTeamName() {

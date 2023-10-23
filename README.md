@@ -31,3 +31,5 @@ with the same love for the sport as me.
 * As a user, I want to be able to assign wins and losses to a team
 * As a user, I want to be able to view the statistics of each player
 * As a user, I want to be able to create a player
+* As a user, I want to be able to save the state of the league including teams, players, stats, etc. in the menu
+* As a user, I want to be able to load the league from file in the menu from the state it was left at

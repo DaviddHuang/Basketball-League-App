@@ -1,9 +1,13 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.*;
 
 // represents a basketball league with a name and an empty list of teams
-public class League {
+public class League implements Writable {
     private List<Team> league;
     private String name;
     private boolean seasonNotOver;
@@ -111,6 +115,46 @@ public class League {
     // EFFECTS: changes the status of the season to the given status
     public void leagueStatus(boolean status) {
         this.seasonNotOver = status;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("League name", name);
+        json.put("Teams", teamsToJson());
+        json.put("League MVP", leagueMostValuablePlayerToJson());
+        json.put("League DPOY", leagueDefensivePlayerToJson());
+        return json;
+    }
+
+    // EFFECTS: returns teams in this league as a JSON array
+    private JSONArray teamsToJson() {
+        JSONArray array = new JSONArray();
+
+        for (Team t : league) {
+            array.put(t.toJson());
+        }
+        return array;
+    }
+
+    // EFFECTS: returns the league MVP in this league as a JSON array
+    private JSONArray leagueMostValuablePlayerToJson() {
+        JSONArray array = new JSONArray();
+
+        for (Player p : leagueMostValuablePlayer) {
+            array.put(p.toJson());
+        }
+        return array;
+    }
+
+    // EFFECTS: returns the league DPOY in this league as a JSON array
+    private JSONArray leagueDefensivePlayerToJson() {
+        JSONArray array = new JSONArray();
+
+        for (Player p : leagueDefensivePlayer) {
+            array.put(p.toJson());
+        }
+        return array;
     }
 
     // getters

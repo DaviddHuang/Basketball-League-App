@@ -1,7 +1,10 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 // Represents a basketball player with a name, jersey number, height(cm), weight(lbs)
-public class Player {
+public class Player implements Writable {
     private String name;
     private int number;
     private Double weight;
@@ -109,6 +112,24 @@ public class Player {
         this.healthy = status;
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("Name", name);
+        json.put("Position", position);
+        json.put("Number", number);
+        json.put("Height", height);
+        json.put("Weight", weight);
+        json.put("Points", points);
+        json.put("Rebounds", rebounds);
+        json.put("Assists", assists);
+        json.put("Steals", steals);
+        json.put("Blocks", blocks);
+        json.put("Games played", gamesPlayed);
+        json.put("Health status", healthy);
+        return json;
+    }
+
     // getters
 
     public String getName() {
@@ -123,9 +144,11 @@ public class Player {
         return points;
     }
 
+
     public int getRebounds() {
         return rebounds;
     }
+
 
     public int getAssists() {
         return assists;
