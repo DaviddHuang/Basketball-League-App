@@ -52,9 +52,13 @@ public class TestWriter {
             l.addTeam(t1);
             l.addTeam(t2);
             Player p = new Player("Stephen Curry", "PG", 30, 188, 205.0);
+            Player p2 = new Player("Lebron James", "SF", 23, 205, 255.0);
             t1.addPlayer(p);
+            t1.addPlayer(p2);
+            p2.isPlayerHealthy(false);
             t1.calculateMostValuablePlayer();
             t1.calculateDefensivePlayer();
+            t1.addPlayerInjuryReserve();
             Writer writer = new Writer("./data/testWriterGeneralLeague.json");
             writer.open();
             writer.write(l);
@@ -68,6 +72,7 @@ public class TestWriter {
             assertEquals("Stephen Curry", l.getTeams().get(0).getRoster().get(0).getName());
             assertEquals("Stephen Curry", l.getTeams().get(0).getScoringLeader().get(0).getName());
             assertEquals("Stephen Curry", l.getTeams().get(0).getDefensiveLeader().get(0).getName());
+            assertEquals("Lebron James", l.getTeams().get(0).getInjuryReserve().get(0).getName());
         } catch (IOException e) {
             fail("Should not have thrown IOException");
         }
