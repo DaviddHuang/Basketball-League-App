@@ -151,4 +151,20 @@ public class LeagueTest {
         assertTrue(testLeague.getLeagueWinner().contains(testTeam2));
         assertFalse(testLeague.getLeagueWinner().contains(testTeam1));
     }
+
+    @Test
+    void testCalculateLeagueMostValuablePlayerScoringLeaderEmpty() {
+        testLeague.addTeam(testTeam1);
+        assertFalse(testLeague.getTeams().isEmpty());
+        assertTrue(testLeague.getTeams().get(0).getScoringLeader().isEmpty());
+        assertFalse(testLeague.calculateLeagueMostValuablePlayer());
+    }
+
+    @Test
+    void testCalculateLeagueDefensivePlayerEmpty() {
+        testLeague.addTeam(testTeam1);
+        assertFalse(testLeague.getTeams().isEmpty());
+        assertTrue(testLeague.getTeams().get(0).getDefensiveLeader().isEmpty());
+        assertFalse(testLeague.calculateLeagueDefensivePlayer());
+    }
 }

@@ -56,6 +56,7 @@ public class League implements Writable {
         return false;
     }
 
+    // REQUIRES: all teams have at least one player
     // MODIFIES: this
     // EFFECTS: calculates the scoring leading from every team and adds them to mvp list, return true if successful else
     //          return false
