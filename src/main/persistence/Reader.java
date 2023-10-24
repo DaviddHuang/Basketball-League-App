@@ -45,6 +45,9 @@ public class Reader {
         String name = jsonObject.getString("League name");
         League l = new League(name);
         addTeam(l, jsonObject);
+        l.calculateLeagueMostValuablePlayer();
+        l.calculateLeagueDefensivePlayer();
+        l.calculateLeagueWinner();
         return l;
     }
 

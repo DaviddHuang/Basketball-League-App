@@ -490,7 +490,7 @@ public class BasketballLeagueApp {
         funLeague.calculateLeagueDefensivePlayer();
         displayLeagueDefensivePlayer();
 
-        System.exit(0);
+        startApp();
     }
 
     // REQUIRES: jersey >= 0

@@ -69,6 +69,7 @@ public class League implements Writable {
 
                 }
             }
+            leagueMostValuablePlayer.clear();
             leagueMostValuablePlayer.add(mvp);
             return true;
         }
@@ -88,6 +89,7 @@ public class League implements Writable {
 
                 }
             }
+            leagueDefensivePlayer.clear();
             leagueDefensivePlayer.add(dpoy);
             return true;
         }
@@ -106,6 +108,7 @@ public class League implements Writable {
                     winner = t;
                 }
             }
+            leagueWinner.clear();
             leagueWinner.add(winner);
             return true;
         }
@@ -124,6 +127,7 @@ public class League implements Writable {
         json.put("Teams", teamsToJson());
         json.put("League MVP", leagueMostValuablePlayerToJson());
         json.put("League DPOY", leagueDefensivePlayerToJson());
+        json.put("League winner", leagueWinnerTOJson());
         return json;
     }
 
@@ -157,6 +161,16 @@ public class League implements Writable {
         return array;
     }
 
+    // EFFECTS: returns the league winner in this league as a JSON array
+    private JSONArray leagueWinnerTOJson() {
+        JSONArray array = new JSONArray();
+
+        for (Team t : leagueWinner) {
+            array.put(t.toJson());
+        }
+        return array;
+    }
+
     // getters
 
     public String getLeagueName() {
@@ -186,5 +200,4 @@ public class League implements Writable {
     public boolean getLeagueStatus() {
         return seasonNotOver;
     }
-
 }

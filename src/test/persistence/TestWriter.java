@@ -53,12 +53,23 @@ public class TestWriter {
             l.addTeam(t2);
             Player p = new Player("Stephen Curry", "PG", 30, 188, 205.0);
             Player p2 = new Player("Lebron James", "SF", 23, 205, 255.0);
+            Player p3 = new Player("Kyle Lowry", "PG", 0, 205, 255.0);
+            p.playGame(1,1,1,1,1,1);
             t1.addPlayer(p);
             t1.addPlayer(p2);
+            t2.addPlayer(p3);
+            t1.teamRecord(10,2);
+            t2.teamRecord(0,10);
             p2.isPlayerHealthy(false);
             t1.calculateMostValuablePlayer();
             t1.calculateDefensivePlayer();
             t1.addPlayerInjuryReserve();
+            t2.calculateMostValuablePlayer();
+            t2.calculateDefensivePlayer();
+            t2.addPlayerInjuryReserve();
+            l.calculateLeagueWinner();
+            l.calculateLeagueDefensivePlayer();
+            l.calculateLeagueMostValuablePlayer();
             Writer writer = new Writer("./data/testWriterGeneralLeague.json");
             writer.open();
             writer.write(l);
@@ -73,6 +84,9 @@ public class TestWriter {
             assertEquals("Stephen Curry", l.getTeams().get(0).getScoringLeader().get(0).getName());
             assertEquals("Stephen Curry", l.getTeams().get(0).getDefensiveLeader().get(0).getName());
             assertEquals("Lebron James", l.getTeams().get(0).getInjuryReserve().get(0).getName());
+            assertEquals("Stephen Curry", l.getLeagueMostValuablePlayer().get(0).getName());
+            assertEquals("Stephen Curry", l.getLeagueDefensivePlayer().get(0).getName());
+            assertEquals("Vancouver Grizzlies", l.getLeagueWinner().get(0).getTeamName());
         } catch (IOException e) {
             fail("Should not have thrown IOException");
         }
