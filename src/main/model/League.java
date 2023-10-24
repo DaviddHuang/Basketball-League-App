@@ -60,7 +60,7 @@ public class League implements Writable {
     // EFFECTS: calculates the scoring leading from every team and adds them to mvp list, return true if successful else
     //          return false
     public boolean calculateLeagueMostValuablePlayer() {
-        while (!league.isEmpty()) {
+        if (!league.isEmpty() && !league.get(0).getScoringLeader().isEmpty()) {
             Player mvp = league.get(0).getScoringLeader().get(0);
 
             for (Team t : league) {
@@ -80,7 +80,7 @@ public class League implements Writable {
     // EFFECTS: calculates the defensive leader from every team and adds them to the defensive player list, return true
     //          if successful else return false
     public boolean calculateLeagueDefensivePlayer() {
-        while (!league.isEmpty()) {
+        if (!league.isEmpty() && !league.get(0).getDefensiveLeader().isEmpty()) {
             Player dpoy = league.get(0).getDefensiveLeader().get(0);
 
             for (Team t : league) {
@@ -100,7 +100,7 @@ public class League implements Writable {
     // EFFECTS: calculates the league winner from all team and adds the winner to winner list, return true if successful
     //          otherwise return false
     public boolean calculateLeagueWinner() {
-        while (!league.isEmpty()) {
+        if (!league.isEmpty()) {
             Team winner = league.get(0);
 
             for (Team t : league) {
