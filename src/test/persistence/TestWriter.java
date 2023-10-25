@@ -11,6 +11,7 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+// Code is influenced by: https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 public class TestWriter {
 
     @Test
