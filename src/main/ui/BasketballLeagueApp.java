@@ -176,6 +176,7 @@ public class BasketballLeagueApp {
         String teamName = input.next();
         if (funLeague.removeTeam(teamName)) {
             System.out.println("Team removed: " + teamName);
+            funTeam = null;
             teamMenu();
         } else {
             System.out.println("That team does not exist...");
