@@ -166,6 +166,7 @@ public class Team implements Writable {
         teamGamesPlayed++;
     }
 
+    // EFFECTS: converts Team into JSON object
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

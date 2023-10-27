@@ -112,6 +112,7 @@ public class Player implements Writable {
         this.healthy = status;
     }
 
+    // EFFECTS: converts Player into JSON object
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

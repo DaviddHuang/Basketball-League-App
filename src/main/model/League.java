@@ -121,6 +121,7 @@ public class League implements Writable {
         this.seasonNotOver = status;
     }
 
+    // EFFECTS: converts League into JSON object
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
