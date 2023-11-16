@@ -40,12 +40,17 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     private JTextField jerseyNumber;
     private JTextField removeTeamName;
     private JTextField selectTeamName;
+    private JTextField removePlayerName;
+    private JTextField selectPlayerName;
+    private JTextField healthStatus;
     private JFrame leagueMenu = new JFrame();
     private JFrame success = new JFrame();
     private JFrame addTeam;
     private JFrame removeTeam;
     private JFrame selectTeam;
     private JFrame addPlayer;
+    private JFrame removePlayer;
+    private JFrame selectPlayer;
     private JTable standings;
     private JTable roster;
     private DefaultTableModel model;
@@ -72,27 +77,15 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         actionPerformedHelper(e);
-        if (e.getActionCommand().equals("submitSelectTeam")) {
-            selectTeam();
-        } else if (e.getActionCommand().equals("back")) {
-            playerButtonsPanel.setVisible(false);
-            buttonsPanel.setVisible(true);
-            rosterPanel.setVisible(false);
-            leagueMenu();
-        } else if (e.getActionCommand().equals("viewRoster")) {
-            displayPlayers();
-        } else if (e.getActionCommand().equals("addPlayer")) {
-            addPlayerMenu();
-        } else if (e.getActionCommand().equals("nameNext")) {
-            addPosition();
-        } else if (e.getActionCommand().equals("positionNext")) {
-            addJerseyNumber();
-        } else if (e.getActionCommand().equals("jerseyNext")) {
-            addHeight();
-        } else if (e.getActionCommand().equals("heightNext")) {
-            addWeight();
-        } else if (e.getActionCommand().equals("submitPlayer")) {
-            addPlayer();
+        secondActionPerformedHelper(e);
+        if (e.getActionCommand().equals("removePlayer")) {
+            removePlayerMenu();
+        } else if (e.getActionCommand().equals("submitRemovePlayer")) {
+            removePlayer();
+        } else if (e.getActionCommand().equals("selectPlayer")) {
+            selectPlayerMenu();
+        } else if (e.getActionCommand().equals("nextSelectPlayer")) {
+            editHealthStatus();
         }
     }
 
@@ -119,6 +112,31 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
             removeTeam();
         } else if (e.getActionCommand().equals("select")) {
             selectTeamMenu();
+        }
+    }
+
+    private void secondActionPerformedHelper(ActionEvent e) {
+        if (e.getActionCommand().equals("submitSelectTeam")) {
+            selectTeam();
+        } else if (e.getActionCommand().equals("back")) {
+            playerButtonsPanel.setVisible(false);
+            buttonsPanel.setVisible(true);
+            rosterPanel.setVisible(false);
+            leagueMenu();
+        } else if (e.getActionCommand().equals("viewRoster")) {
+            displayPlayers();
+        } else if (e.getActionCommand().equals("addPlayer")) {
+            addPlayerMenu();
+        } else if (e.getActionCommand().equals("nameNext")) {
+            addPosition();
+        } else if (e.getActionCommand().equals("positionNext")) {
+            addJerseyNumber();
+        } else if (e.getActionCommand().equals("jerseyNext")) {
+            addHeight();
+        } else if (e.getActionCommand().equals("heightNext")) {
+            addWeight();
+        } else if (e.getActionCommand().equals("submitPlayer")) {
+            addPlayer();
         }
     }
 
@@ -228,8 +246,11 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
             writer.open();
             writer.write(league);
             writer.closeWriter();
+            JOptionPane.showConfirmDialog(null, "Successfully saved: " + league.getLeagueName()
+                    + " to " + FILE_DIRECTORY, "title", JOptionPane.DEFAULT_OPTION);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "File could not be written: " + FILE_DIRECTORY,
+                    "title", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -240,9 +261,12 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         try {
             league = reader.read();
             standingsPanel.setVisible(false);
+            JOptionPane.showConfirmDialog(null, "Successfully loaded: " + league.getLeagueName()
+                    + " from " + FILE_DIRECTORY, "title", JOptionPane.DEFAULT_OPTION);
             leagueMenu();
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "File could not be read: " + FILE_DIRECTORY,
+                    "title", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -486,7 +510,8 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     private void displayPlayers() {
         rosterPanel.setLayout(new BorderLayout());
         rosterPanel.setBounds(0,119,600,531);
-        String[] categories = {"Name", "Position", "#", "Height", "Weight", "PPG", "RPG", "SPG", "BPG", "GP"};
+        String[] categories = {"Name", "Position", "#", "Height (cm)", "Weight (lbs)", "PPG", "RPG", "SPG", "BPG",
+                "GP"};
 
         if (roster == null) {
             rosterModel = new DefaultTableModel(addPlayersToDisplay().toArray(new Object[addPlayersToDisplay().size()][]
@@ -512,7 +537,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     private ArrayList<Object[]> addPlayersToDisplay() {
         ArrayList<Object[]> data = new ArrayList<>();
         for (Player p : team.getRoster()) {
-            data.add(new Object[]{p.getName(), p.getPosition(), p.getJerseyNumber(), p.getWeight(), p.getWeight(),
+            data.add(new Object[]{p.getName(), p.getPosition(), p.getJerseyNumber(), p.getHeight(), p.getWeight(),
                     p.averagePoints(), p.getRebounds(), p.averageAssists(), p.averageSteals(), p.averageBlocks(),
                     p.getGamesPlayed()});
         }
@@ -618,14 +643,107 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     }
 
     private void addPlayer() {
-        int answer = JOptionPane.showConfirmDialog(null, "Player added: "
-                + playerName.getText(),"title", JOptionPane.DEFAULT_OPTION);
-        if (answer == JOptionPane.OK_OPTION) {
-            addPlayer.setVisible(false);
-            player = new Player(playerName.getText(), positionName.getText(), Integer.parseInt(jerseyNumber.getText()),
-                    Integer.parseInt(height.getText()), Double.parseDouble(weight.getText()));
-            team.addPlayer(player);
+        player = new Player(playerName.getText(), positionName.getText(),
+                Integer.parseInt(jerseyNumber.getText()),
+                Integer.parseInt(height.getText()), Double.parseDouble(weight.getText()));
+        if (!team.addPlayer(player)) {
+            JOptionPane.showMessageDialog(null, "Player cannot be added: jersey number is"
+                           + " already taken", "title",
+                        JOptionPane.ERROR_MESSAGE);
+            addPlayer.dispose();
+            addPlayerMenu();
+        } else {
+            int answer = JOptionPane.showConfirmDialog(null, "Player added: "
+                    + playerName.getText(),"title", JOptionPane.DEFAULT_OPTION);
+            if (answer == JOptionPane.OK_OPTION) {
+                addPlayer.setVisible(false);
+            }
         }
+    }
+
+    private void removePlayerMenu() {
+        if (removePlayer == null || !removePlayer.isVisible()) {
+            removePlayer = new JFrame();
+            removePlayer.setLayout(null);
+            removePlayer.setPreferredSize(new Dimension(400,300));
+            removePlayer.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            removePlayerName = new JTextField();
+            removePlayerName.setBounds(100,90,200,40);
+            JButton submitRemovePlayerName = new JButton("Submit");
+            submitRemovePlayerName.setActionCommand("submitRemovePlayer");
+            submitRemovePlayerName.addActionListener(this);
+            submitRemovePlayerName.setBounds(137,140,125,40);
+            JLabel enterRemovePlayerName = new JLabel();
+            enterRemovePlayerName.setText("Enter Player name!");
+            enterRemovePlayerName.setBounds(145,50,200,40);
+            removePlayer.add(enterRemovePlayerName);
+            removePlayer.add(removePlayerName);
+            removePlayer.add(submitRemovePlayerName);
+            removePlayer.pack();
+            removePlayer.setLocationRelativeTo(null);
+            removePlayer.setResizable(false);
+            removePlayer.setVisible(true);
+        }
+    }
+
+    private void removePlayer() {
+        for (Player p: team.getRoster()) {
+            if (p.getName().equalsIgnoreCase(removePlayerName.getText())) {
+                team.removePlayer(removePlayerName.getText());
+                int answer = JOptionPane.showConfirmDialog(null, "Player removed: "
+                        + removePlayerName.getText()
+                        + " has been removed!","title", JOptionPane.DEFAULT_OPTION);
+                if (answer == JOptionPane.OK_OPTION) {
+                    removePlayer.setVisible(false);
+                }
+                return;
+            }
+        }
+        JOptionPane.showMessageDialog(null, "Player not found", "title",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void selectPlayerMenu() {
+        if (selectPlayer == null || !selectPlayer.isVisible()) {
+            selectPlayer = new JFrame();
+            selectPlayer.setLayout(null);
+            selectPlayer.setPreferredSize(new Dimension(400,300));
+            selectPlayer.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            selectPlayerName = new JTextField();
+            selectPlayerName.setBounds(100,90,200,40);
+            JButton submitSelectPlayerName = new JButton("Next");
+            submitSelectPlayerName.setActionCommand("nextSelectPlayer");
+            submitSelectPlayerName.addActionListener(this);
+            submitSelectPlayerName.setBounds(137,140,125,40);
+            JLabel enterSelectPlayerName = new JLabel();
+            enterSelectPlayerName.setText("Enter Player name!");
+            enterSelectPlayerName.setBounds(145,50,200,40);
+            selectPlayer.add(enterSelectPlayerName);
+            selectPlayer.add(selectPlayerName);
+            selectPlayer.add(submitSelectPlayerName);
+            selectPlayer.pack();
+            selectPlayer.setLocationRelativeTo(null);
+            selectPlayer.setResizable(false);
+            selectPlayer.setVisible(true);
+        }
+    }
+
+    private void editHealthStatus() {
+        selectPlayer.getContentPane().removeAll();
+        healthStatus =  new JTextField();
+        healthStatus.setBounds(100,90,200,40);
+        JButton submitHealthStatus = new JButton("Next");
+        submitHealthStatus.setActionCommand("healthStatusNext");
+        submitHealthStatus.addActionListener(this);
+        submitHealthStatus.setBounds(137,140,125,40);
+        JLabel enterHealthStatus = new JLabel();
+        enterHealthStatus.setText("Enter health status (True = health | False = injured)");
+        enterHealthStatus.setBounds(40,50,400,40);
+        selectPlayer.add(healthStatus);
+        selectPlayer.add(submitHealthStatus);
+        selectPlayer.add(enterHealthStatus);
+        selectPlayer.revalidate();
+        selectPlayer.repaint();
     }
 
 
