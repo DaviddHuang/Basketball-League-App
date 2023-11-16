@@ -29,18 +29,27 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     private JPanel buttonsPanel = new JPanel();
     private JPanel playerButtonsPanel = new JPanel();
     private JPanel standingsPanel = new JPanel();
+    private JPanel rosterPanel = new JPanel();
+    private JPanel teamMenu = new JPanel();
     private JTextField leagueName = new JTextField();
     private JTextField teamName;
+    private JTextField playerName;
+    private JTextField positionName;
+    private JTextField height;
+    private JTextField weight;
+    private JTextField jerseyNumber;
     private JTextField removeTeamName;
     private JTextField selectTeamName;
     private JFrame leagueMenu = new JFrame();
     private JFrame success = new JFrame();
-    private JFrame teamMenu = new JFrame();
     private JFrame addTeam;
     private JFrame removeTeam;
     private JFrame selectTeam;
+    private JFrame addPlayer;
     private JTable standings;
+    private JTable roster;
     private DefaultTableModel model;
+    private DefaultTableModel rosterModel;
 
 
     // EFFECTS: creates a frame that holds the menu screen
@@ -65,7 +74,25 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         actionPerformedHelper(e);
         if (e.getActionCommand().equals("submitSelectTeam")) {
             selectTeam();
-            playerMenu();
+        } else if (e.getActionCommand().equals("back")) {
+            playerButtonsPanel.setVisible(false);
+            buttonsPanel.setVisible(true);
+            rosterPanel.setVisible(false);
+            leagueMenu();
+        } else if (e.getActionCommand().equals("viewRoster")) {
+            displayPlayers();
+        } else if (e.getActionCommand().equals("addPlayer")) {
+            addPlayerMenu();
+        } else if (e.getActionCommand().equals("nameNext")) {
+            addPosition();
+        } else if (e.getActionCommand().equals("positionNext")) {
+            addJerseyNumber();
+        } else if (e.getActionCommand().equals("jerseyNext")) {
+            addHeight();
+        } else if (e.getActionCommand().equals("heightNext")) {
+            addWeight();
+        } else if (e.getActionCommand().equals("submitPlayer")) {
+            addPlayer();
         }
     }
 
@@ -394,6 +421,8 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
                         + " has been selected!","title", JOptionPane.DEFAULT_OPTION);
                 if (answer == JOptionPane.OK_OPTION) {
                     selectTeam.setVisible(false);
+                    playerMenu();
+                    standingsPanel.setVisible(false);
                 }
                 return;
             }
@@ -404,20 +433,21 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
 
     // EFFECTS: creates a player menu
     private void playerMenu() {
+        buttonsPanel.setVisible(false);
+        leagueMenu.setTitle("Team: " + selectTeamName.getText());
         selectTeamName.setText("");
-        leagueMenu.setVisible(false);
-        teamMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        teamMenu.setTitle("League: " + league.getLeagueName());
         teamMenu.setSize(new Dimension(600,600));
         teamMenu.setLayout(null);
         playerButtonsPanel.setBounds(0,15,600,65);
         playerButtons();
-        teamMenu.add(playerButtonsPanel);
-        teamMenu.setLocationRelativeTo(null);
+        leagueMenu.add(playerButtonsPanel);
+        playerButtonsPanel.setVisible(true);
         teamMenu.setVisible(true);
+        leagueMenu.revalidate();
+        leagueMenu.repaint();
     }
 
-    // EFFECTS: helper method to initialize all the buttons in leagueMenu
+    // EFFECTS: helper method to initialize all the buttons in playerMenu
     private void playerButtons() {
         playerButtonsPanel.removeAll();
         JButton addPlayer = new JButton("Add player");
@@ -448,6 +478,154 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         back.setActionCommand("back");
         back.addActionListener(this);
         playerButtonsPanel.add(back);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: creates a JTable that stores players as an 2-D object array if there is no JTable, otherwise clear rows
+    //          and add all the players to each row again
+    private void displayPlayers() {
+        rosterPanel.setLayout(new BorderLayout());
+        rosterPanel.setBounds(0,119,600,531);
+        String[] categories = {"Name", "Position", "#", "Height", "Weight", "PPG", "RPG", "SPG", "BPG", "GP"};
+
+        if (roster == null) {
+            rosterModel = new DefaultTableModel(addPlayersToDisplay().toArray(new Object[addPlayersToDisplay().size()][]
+            ),
+                    categories);
+            roster = new JTable(rosterModel);
+            rosterPanel.add(new JScrollPane(roster));
+            roster.setDefaultEditor(Object.class,null);
+            roster.getColumnModel().getColumn(0).setPreferredWidth(200);
+        } else {
+            rosterModel.setRowCount(0);
+            for (Object[] player : addPlayersToDisplay()) {
+                rosterModel.addRow(player);
+            }
+        }
+        rosterPanel.setVisible(true);
+        leagueMenu.add(rosterPanel);
+        leagueMenu.repaint();
+        leagueMenu.revalidate();
+    }
+
+    // EFFECTS: adds each player as an object array stored in a list and returns it
+    private ArrayList<Object[]> addPlayersToDisplay() {
+        ArrayList<Object[]> data = new ArrayList<>();
+        for (Player p : team.getRoster()) {
+            data.add(new Object[]{p.getName(), p.getPosition(), p.getJerseyNumber(), p.getWeight(), p.getWeight(),
+                    p.averagePoints(), p.getRebounds(), p.averageAssists(), p.averageSteals(), p.averageBlocks(),
+                    p.getGamesPlayed()});
+        }
+        return data;
+    }
+
+    // EFFECTS: creates a player menu
+    private void addPlayerMenu() {
+        if (addPlayer == null || !addPlayer.isVisible()) {
+            addPlayer = new JFrame();
+            addPlayer.setLayout(null);
+            addPlayer.setPreferredSize(new Dimension(400,300));
+            addPlayer.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            playerName = new JTextField();
+            playerName.setBounds(100,90,200,40);
+            JButton submitTeamName = new JButton("Next");
+            submitTeamName.setActionCommand("nameNext");
+            submitTeamName.addActionListener(this);
+            submitTeamName.setBounds(137,140,125,40);
+            JLabel enterTeamName = new JLabel();
+            enterTeamName.setText("Enter Player name!");
+            enterTeamName.setBounds(145,50,200,40);
+            addPlayer.add(enterTeamName);
+            addPlayer.add(playerName);
+            addPlayer.add(submitTeamName);
+            addPlayer.pack();
+            addPlayer.setLocationRelativeTo(null);
+            addPlayer.setResizable(false);
+            addPlayer.setVisible(true);
+        }
+    }
+
+    private void addPosition() {
+        addPlayer.getContentPane().removeAll();
+        positionName =  new JTextField();
+        positionName.setBounds(100,90,200,40);
+        JButton submitPositionName = new JButton("Next");
+        submitPositionName.setActionCommand("positionNext");
+        submitPositionName.addActionListener(this);
+        submitPositionName.setBounds(137,140,125,40);
+        JLabel enterPositionName = new JLabel();
+        enterPositionName.setText("Enter Position!");
+        enterPositionName.setBounds(145,50,200,40);
+        addPlayer.add(positionName);
+        addPlayer.add(submitPositionName);
+        addPlayer.add(enterPositionName);
+        addPlayer.revalidate();
+        addPlayer.repaint();
+    }
+
+    private void addJerseyNumber() {
+        addPlayer.getContentPane().removeAll();
+        jerseyNumber =  new JTextField();
+        jerseyNumber.setBounds(100,90,200,40);
+        JButton submitJerseyNumber = new JButton("Next");
+        submitJerseyNumber.setActionCommand("jerseyNext");
+        submitJerseyNumber.addActionListener(this);
+        submitJerseyNumber.setBounds(137,140,125,40);
+        JLabel enterJerseyNumber = new JLabel();
+        enterJerseyNumber.setText("Enter Jersey Number!");
+        enterJerseyNumber.setBounds(145,50,200,40);
+        addPlayer.add(jerseyNumber);
+        addPlayer.add(submitJerseyNumber);
+        addPlayer.add(enterJerseyNumber);
+        addPlayer.revalidate();
+        addPlayer.repaint();
+    }
+
+    private void addHeight() {
+        addPlayer.getContentPane().removeAll();
+        height =  new JTextField();
+        height.setBounds(100,90,200,40);
+        JButton submitHeight = new JButton("Next");
+        submitHeight.setActionCommand("heightNext");
+        submitHeight.addActionListener(this);
+        submitHeight.setBounds(137,140,125,40);
+        JLabel enterHeight = new JLabel();
+        enterHeight.setText("Enter Height! (cm)");
+        enterHeight.setBounds(145,50,200,40);
+        addPlayer.add(height);
+        addPlayer.add(submitHeight);
+        addPlayer.add(enterHeight);
+        addPlayer.revalidate();
+        addPlayer.repaint();
+    }
+
+    private void addWeight() {
+        addPlayer.getContentPane().removeAll();
+        weight =  new JTextField();
+        weight.setBounds(100,90,200,40);
+        JButton submitWeight = new JButton("Submit");
+        submitWeight.setActionCommand("submitPlayer");
+        submitWeight.addActionListener(this);
+        submitWeight.setBounds(137,140,125,40);
+        JLabel enterWeight = new JLabel();
+        enterWeight.setText("Enter Weight! (lbs)");
+        enterWeight.setBounds(145,50,200,40);
+        addPlayer.add(weight);
+        addPlayer.add(submitWeight);
+        addPlayer.add(enterWeight);
+        addPlayer.revalidate();
+        addPlayer.repaint();
+    }
+
+    private void addPlayer() {
+        int answer = JOptionPane.showConfirmDialog(null, "Player added: "
+                + playerName.getText(),"title", JOptionPane.DEFAULT_OPTION);
+        if (answer == JOptionPane.OK_OPTION) {
+            addPlayer.setVisible(false);
+            player = new Player(playerName.getText(), positionName.getText(), Integer.parseInt(jerseyNumber.getText()),
+                    Integer.parseInt(height.getText()), Double.parseDouble(weight.getText()));
+            team.addPlayer(player);
+        }
     }
 
 
