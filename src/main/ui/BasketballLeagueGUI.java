@@ -43,6 +43,12 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     private JTextField removePlayerName;
     private JTextField selectPlayerName;
     private JTextField healthStatus;
+    private JTextField points;
+    private JTextField rebounds;
+    private JTextField assists;
+    private JTextField steals;
+    private JTextField blocks;
+    private JTextField gamesPlayed;
     private JFrame leagueMenu = new JFrame();
     private JFrame success = new JFrame();
     private JFrame addTeam;
@@ -78,15 +84,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         actionPerformedHelper(e);
         secondActionPerformedHelper(e);
-        if (e.getActionCommand().equals("removePlayer")) {
-            removePlayerMenu();
-        } else if (e.getActionCommand().equals("submitRemovePlayer")) {
-            removePlayer();
-        } else if (e.getActionCommand().equals("selectPlayer")) {
-            selectPlayerMenu();
-        } else if (e.getActionCommand().equals("nextSelectPlayer")) {
-            editHealthStatus();
-        }
+        thirdActionPerformedHelper(e);
     }
 
     private void actionPerformedHelper(ActionEvent e) {
@@ -137,6 +135,32 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
             addWeight();
         } else if (e.getActionCommand().equals("submitPlayer")) {
             addPlayer();
+        }
+    }
+
+    private void thirdActionPerformedHelper(ActionEvent e) {
+        if (e.getActionCommand().equals("removePlayer")) {
+            removePlayerMenu();
+        } else if (e.getActionCommand().equals("submitRemovePlayer")) {
+            removePlayer();
+        } else if (e.getActionCommand().equals("selectPlayer")) {
+            selectPlayerMenu();
+        } else if (e.getActionCommand().equals("nextSelectPlayer")) {
+            selectPlayer();
+        } else if (e.getActionCommand().equals("healthStatusNext")) {
+            editPoints();
+        } else if (e.getActionCommand().equals("pointsNext")) {
+            editRebounds();
+        } else if (e.getActionCommand().equals("reboundsNext")) {
+            editAssists();
+        } else if (e.getActionCommand().equals("assistsNext")) {
+            editSteals();
+        } else if (e.getActionCommand().equals("stealsNext")) {
+            editBlocks();
+        } else if (e.getActionCommand().equals("blocksNext")) {
+            editGamesPlayed();
+        } else if (e.getActionCommand().equals("submitPlayerStats")) {
+            editPlayerStats();
         }
     }
 
@@ -289,6 +313,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
             addTeam.add(enterTeamName);
             addTeam.add(teamName);
             addTeam.add(submitTeamName);
+            addTeam.getRootPane().setDefaultButton(submitTeamName);
             addTeam.pack();
             addTeam.setLocationRelativeTo(null);
             addTeam.setResizable(false);
@@ -382,6 +407,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
             removeTeam.add(enterTeamName);
             removeTeam.add(removeTeamName);
             removeTeam.add(submitTeamName);
+            removeTeam.getRootPane().setDefaultButton(submitTeamName);
             removeTeam.pack();
             removeTeam.setLocationRelativeTo(null);
             removeTeam.setResizable(false);
@@ -427,6 +453,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
             selectTeam.add(enterTeamName);
             selectTeam.add(selectTeamName);
             selectTeam.add(submitTeamName);
+            selectTeam.getRootPane().setDefaultButton(submitTeamName);
             selectTeam.pack();
             selectTeam.setLocationRelativeTo(null);
             selectTeam.setResizable(false);
@@ -498,9 +525,13 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     }
 
     private void playerButtonsHelper() {
+        JButton edit = new JButton("Edit Team Record");
+        edit.setActionCommand("edit");
+        edit.addActionListener(this);
         JButton back = new JButton("Back");
         back.setActionCommand("back");
         back.addActionListener(this);
+        playerButtonsPanel.add(edit);
         playerButtonsPanel.add(back);
     }
 
@@ -510,8 +541,8 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     private void displayPlayers() {
         rosterPanel.setLayout(new BorderLayout());
         rosterPanel.setBounds(0,119,600,531);
-        String[] categories = {"Name", "Position", "#", "Height (cm)", "Weight (lbs)", "PPG", "RPG", "SPG", "BPG",
-                "GP"};
+        String[] categories = {"Name", "Position", "#", "Height (cm)", "Weight (lbs)", "PPG", "RPG", "APG", "SPG",
+                "BPG", "GP"};
 
         if (roster == null) {
             rosterModel = new DefaultTableModel(addPlayersToDisplay().toArray(new Object[addPlayersToDisplay().size()][]
@@ -538,7 +569,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         ArrayList<Object[]> data = new ArrayList<>();
         for (Player p : team.getRoster()) {
             data.add(new Object[]{p.getName(), p.getPosition(), p.getJerseyNumber(), p.getHeight(), p.getWeight(),
-                    p.averagePoints(), p.getRebounds(), p.averageAssists(), p.averageSteals(), p.averageBlocks(),
+                    p.averagePoints(), p.averageRebounds(), p.averageAssists(), p.averageSteals(), p.averageBlocks(),
                     p.getGamesPlayed()});
         }
         return data;
@@ -563,6 +594,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
             addPlayer.add(enterTeamName);
             addPlayer.add(playerName);
             addPlayer.add(submitTeamName);
+            addPlayer.getRootPane().setDefaultButton(submitTeamName);
             addPlayer.pack();
             addPlayer.setLocationRelativeTo(null);
             addPlayer.setResizable(false);
@@ -584,6 +616,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         addPlayer.add(positionName);
         addPlayer.add(submitPositionName);
         addPlayer.add(enterPositionName);
+        addPlayer.getRootPane().setDefaultButton(submitPositionName);
         addPlayer.revalidate();
         addPlayer.repaint();
     }
@@ -602,6 +635,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         addPlayer.add(jerseyNumber);
         addPlayer.add(submitJerseyNumber);
         addPlayer.add(enterJerseyNumber);
+        addPlayer.getRootPane().setDefaultButton(submitJerseyNumber);
         addPlayer.revalidate();
         addPlayer.repaint();
     }
@@ -620,6 +654,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         addPlayer.add(height);
         addPlayer.add(submitHeight);
         addPlayer.add(enterHeight);
+        addPlayer.getRootPane().setDefaultButton(submitHeight);
         addPlayer.revalidate();
         addPlayer.repaint();
     }
@@ -638,6 +673,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         addPlayer.add(weight);
         addPlayer.add(submitWeight);
         addPlayer.add(enterWeight);
+        addPlayer.getRootPane().setDefaultButton(submitWeight);
         addPlayer.revalidate();
         addPlayer.repaint();
     }
@@ -679,6 +715,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
             removePlayer.add(enterRemovePlayerName);
             removePlayer.add(removePlayerName);
             removePlayer.add(submitRemovePlayerName);
+            selectPlayer.getRootPane().setDefaultButton(submitRemovePlayerName);
             removePlayer.pack();
             removePlayer.setLocationRelativeTo(null);
             removePlayer.setResizable(false);
@@ -721,6 +758,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
             selectPlayer.add(enterSelectPlayerName);
             selectPlayer.add(selectPlayerName);
             selectPlayer.add(submitSelectPlayerName);
+            selectPlayer.getRootPane().setDefaultButton(submitSelectPlayerName);
             selectPlayer.pack();
             selectPlayer.setLocationRelativeTo(null);
             selectPlayer.setResizable(false);
@@ -742,8 +780,114 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         selectPlayer.add(healthStatus);
         selectPlayer.add(submitHealthStatus);
         selectPlayer.add(enterHealthStatus);
+        selectPlayer.getRootPane().setDefaultButton(submitHealthStatus);
         selectPlayer.revalidate();
         selectPlayer.repaint();
+    }
+
+    private void editPoints() {
+        points =  new JTextField();
+        JLabel enter = new JLabel();
+        enter.setText("Enter latest amount of points scored");
+        enter.setBounds(80,50,400,40);
+        addStatsHelper(points, "Next", "pointsNext");
+        selectPlayer.add(enter);
+        points.setBounds(100,90,200,40);
+    }
+
+    private void editRebounds() {
+        rebounds =  new JTextField();
+        JLabel enter = new JLabel();
+        enter.setText("Enter latest amount of rebounds collected");
+        enter.setBounds(65,50,400,40);
+        addStatsHelper(rebounds, "Next", "reboundsNext");
+        selectPlayer.add(enter);
+        rebounds.setBounds(100,90,200,40);
+    }
+
+    private void editAssists() {
+        assists =  new JTextField();
+        JLabel enter = new JLabel();
+        enter.setText("Enter latest amount of assists collected");
+        enter.setBounds(70,50,400,40);
+        addStatsHelper(assists, "Next", "assistsNext");
+        selectPlayer.add(enter);
+        assists.setBounds(100,90,200,40);
+    }
+
+    private void editSteals() {
+        steals =  new JTextField();
+        JLabel enter = new JLabel();
+        enter.setText("Enter latest amount of steals collected");
+        enter.setBounds(70,50,400,40);
+        addStatsHelper(steals, "Next", "stealsNext");
+        selectPlayer.add(enter);
+        steals.setBounds(100,90,200,40);
+    }
+
+    private void editBlocks() {
+        blocks =  new JTextField();
+        JLabel enter = new JLabel();
+        enter.setText("Enter latest amount of blocks collected");
+        enter.setBounds(70,50,400,40);
+        addStatsHelper(blocks, "Next", "blocksNext");
+        selectPlayer.add(enter);
+        blocks.setBounds(100,90,200,40);
+    }
+
+    private void editGamesPlayed() {
+        gamesPlayed =  new JTextField();
+        JLabel enter = new JLabel();
+        enter.setText("Enter latest amount of games played");
+        enter.setBounds(80,50,400,40);
+        addStatsHelper(gamesPlayed, "Submit", "submitPlayerStats");
+        selectPlayer.add(enter);
+        gamesPlayed.setBounds(100,90,200,40);
+    }
+
+    private void addStatsHelper(JTextField stat, String buttonName, String chooseAction) {
+        selectPlayer.getContentPane().removeAll();
+        stat.setBounds(100,90,200,40);
+        JButton submit = new JButton(buttonName);
+        submit.setActionCommand(chooseAction);
+        submit.addActionListener(this);
+        submit.setBounds(137,140,125,40);
+        selectPlayer.add(stat);
+        selectPlayer.add(submit);
+        selectPlayer.getRootPane().setDefaultButton(submit);
+        selectPlayer.revalidate();
+        selectPlayer.repaint();
+    }
+
+    private void editPlayerStats() {
+        int answer = JOptionPane.showConfirmDialog(null, "Stats updated: "
+                    + selectPlayerName.getText()
+                    + " stats have been updated!","title", JOptionPane.DEFAULT_OPTION);
+        if (answer == JOptionPane.OK_OPTION) {
+            selectPlayer.setVisible(false);
+            player.playGame(Integer.parseInt(points.getText()), Integer.parseInt(rebounds.getText()),
+                    Integer.parseInt(assists.getText()), Integer.parseInt(steals.getText()),
+                    Integer.parseInt(blocks.getText()), Integer.parseInt(gamesPlayed.getText()));
+            player.isPlayerHealthy(Boolean.parseBoolean(healthStatus.getText()));
+            team.addPlayerInjuryReserve();
+        }
+    }
+
+    private void selectPlayer() {
+        for (Player p: team.getRoster()) {
+            if (p.getName().equalsIgnoreCase(selectPlayerName.getText())) {
+                player = p;
+                int answer = JOptionPane.showConfirmDialog(null, "Player selected: "
+                        + selectPlayerName.getText()
+                        + " has been selected!","title", JOptionPane.DEFAULT_OPTION);
+                if (answer == JOptionPane.OK_OPTION) {
+                    editHealthStatus();
+                }
+                return;
+            }
+        }
+        JOptionPane.showMessageDialog(null, "Player not found", "title",
+                JOptionPane.ERROR_MESSAGE);
     }
 
 
