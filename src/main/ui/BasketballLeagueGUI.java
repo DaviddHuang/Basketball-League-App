@@ -31,10 +31,12 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     private JTextField leagueName = new JTextField();
     private JTextField teamName;
     private JTextField removeTeamName;
+    private JTextField selectTeamName;
     private JFrame leagueMenu = new JFrame();
     private JFrame success = new JFrame();
     private JFrame addTeam;
     private JFrame removeTeam;
+    private JFrame selectTeam;
     private JTable standings;
     private DefaultTableModel model;
 
@@ -58,6 +60,13 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     // EFFECTS: determines which action performed when a specific button is pressed
     @Override
     public void actionPerformed(ActionEvent e) {
+        actionPerformedHelper(e);
+        if (e.getActionCommand().equals("submitSelectTeam")) {
+            selectTeam();
+        }
+    }
+
+    private void actionPerformedHelper(ActionEvent e) {
         if (e.getActionCommand().equals("startButton")) {
             startApp();
         } else if (e.getActionCommand().equals("submitName")) {
@@ -78,6 +87,8 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
             removeTeamMenu();
         } else if (e.getActionCommand().equals("submitRemoveTeam")) {
             removeTeam();
+        } else if (e.getActionCommand().equals("select")) {
+            selectTeamMenu();
         }
     }
 
@@ -198,7 +209,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         Reader reader = new Reader(FILE_DIRECTORY);
         try {
             league = reader.read();
-            standingsPanel.removeAll();
+            standingsPanel.setVisible(false);
             leagueMenu();
         } catch (IOException e) {
             e.printStackTrace();
@@ -236,7 +247,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     private void addTeam() {
         int answer = JOptionPane.showConfirmDialog(null, "Team added: "
                 + teamName.getText()
-                + " has been created!","title", JOptionPane.PLAIN_MESSAGE);
+                + " has been created!","title", JOptionPane.DEFAULT_OPTION);
         if (answer == JOptionPane.OK_OPTION) {
             addTeam.setVisible(false);
             team = new Team(teamName.getText());
@@ -271,7 +282,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
                 model.addRow(team);
             }
         }
-
+        standingsPanel.setVisible(true);
         leagueMenu.add(standingsPanel);
         leagueMenu.repaint();
         leagueMenu.revalidate();
@@ -290,7 +301,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     private void submitNameConfirmation() {
         int answer = JOptionPane.showConfirmDialog(null, "Basketball league: "
                 + leagueName.getText()
-                + " has been created!","title", JOptionPane.PLAIN_MESSAGE);
+                + " has been created!","title", JOptionPane.DEFAULT_OPTION);
         if (answer == JOptionPane.OK_OPTION) {
             league = new League(leagueName.getText());
             leagueMenu.setTitle(leagueName.getText());
@@ -327,14 +338,67 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     // MODIFIES: this
     // EFFECTS: creates a JOption pane that removes a team when OK is clicked
     private void removeTeam() {
-        int answer = JOptionPane.showConfirmDialog(null, "Team removed: "
-                + removeTeamName.getText()
-                + " has been removed!","title", JOptionPane.PLAIN_MESSAGE);
-        if (answer == JOptionPane.OK_OPTION) {
-            removeTeam.setVisible(false);
-            league.removeTeam(removeTeamName.getText());
+        for (Team t: league.getTeams()) {
+            if (t.getTeamName().equalsIgnoreCase(removeTeamName.getText())) {
+                league.removeTeam(removeTeamName.getText());
+                int answer = JOptionPane.showConfirmDialog(null, "Team removed: "
+                        + removeTeamName.getText()
+                        + " has been removed!","title", JOptionPane.DEFAULT_OPTION);
+                if (answer == JOptionPane.OK_OPTION) {
+                    removeTeam.setVisible(false);
+                }
+                return;
+            }
+        }
+        JOptionPane.showMessageDialog(null, "Team not found", "title",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    // EFFECTS: creates a selectTeamMenu
+    private void selectTeamMenu() {
+        if (selectTeam == null || !selectTeam.isVisible()) {
+            selectTeam = new JFrame();
+            selectTeam.setLayout(null);
+            selectTeam.setPreferredSize(new Dimension(400,300));
+            selectTeam.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            selectTeamName = new JTextField();
+            selectTeamName.setBounds(100,90,200,40);
+            JButton submitTeamName = new JButton("Submit");
+            submitTeamName.setActionCommand("submitSelectTeam");
+            submitTeamName.addActionListener(this);
+            submitTeamName.setBounds(137,140,125,40);
+            JLabel enterTeamName = new JLabel();
+            enterTeamName.setText("Enter the name of a team to select!");
+            enterTeamName.setBounds(90,50,250,40);
+            selectTeam.add(enterTeamName);
+            selectTeam.add(selectTeamName);
+            selectTeam.add(submitTeamName);
+            selectTeam.pack();
+            selectTeam.setLocationRelativeTo(null);
+            selectTeam.setResizable(false);
+            selectTeam.setVisible(true);
         }
     }
+
+    // MODIFIES: this
+    // EFFECTS: creates a JOption pane that selects a team when OK is clicked
+    private void selectTeam() {
+        for (Team t: league.getTeams()) {
+            if (t.getTeamName().equalsIgnoreCase(selectTeamName.getText())) {
+                team = t;
+                int answer = JOptionPane.showConfirmDialog(null, "Team selected: "
+                        + selectTeamName.getText()
+                        + " has been selected!","title", JOptionPane.DEFAULT_OPTION);
+                if (answer == JOptionPane.OK_OPTION) {
+                    selectTeam.setVisible(false);
+                }
+                return;
+            }
+        }
+        JOptionPane.showMessageDialog(null, "Team not found", "title",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
 
     public static void main(String[] args) {
         new BasketballLeagueGUI();
