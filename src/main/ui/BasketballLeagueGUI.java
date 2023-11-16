@@ -27,6 +27,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     private JPanel startMenu = new JPanel();
     private JPanel startScreen;
     private JPanel buttonsPanel = new JPanel();
+    private JPanel playerButtonsPanel = new JPanel();
     private JPanel standingsPanel = new JPanel();
     private JTextField leagueName = new JTextField();
     private JTextField teamName;
@@ -34,6 +35,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     private JTextField selectTeamName;
     private JFrame leagueMenu = new JFrame();
     private JFrame success = new JFrame();
+    private JFrame teamMenu = new JFrame();
     private JFrame addTeam;
     private JFrame removeTeam;
     private JFrame selectTeam;
@@ -63,6 +65,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         actionPerformedHelper(e);
         if (e.getActionCommand().equals("submitSelectTeam")) {
             selectTeam();
+            playerMenu();
         }
     }
 
@@ -397,6 +400,54 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         }
         JOptionPane.showMessageDialog(null, "Team not found", "title",
                 JOptionPane.ERROR_MESSAGE);
+    }
+
+    // EFFECTS: creates a player menu
+    private void playerMenu() {
+        selectTeamName.setText("");
+        leagueMenu.setVisible(false);
+        teamMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        teamMenu.setTitle("League: " + league.getLeagueName());
+        teamMenu.setSize(new Dimension(600,600));
+        teamMenu.setLayout(null);
+        playerButtonsPanel.setBounds(0,15,600,65);
+        playerButtons();
+        teamMenu.add(playerButtonsPanel);
+        teamMenu.setLocationRelativeTo(null);
+        teamMenu.setVisible(true);
+    }
+
+    // EFFECTS: helper method to initialize all the buttons in leagueMenu
+    private void playerButtons() {
+        playerButtonsPanel.removeAll();
+        JButton addPlayer = new JButton("Add player");
+        addPlayer.setActionCommand("addPlayer");
+        addPlayer.addActionListener(this);
+        JButton selectPlayer = new JButton("Select player");
+        selectPlayer.setActionCommand("selectPlayer");
+        selectPlayer.addActionListener(this);
+        JButton removePlayer = new JButton("Remove player");
+        removePlayer.setActionCommand("removePlayer");
+        removePlayer.addActionListener(this);
+        JButton viewRoster = new JButton("View roster");
+        viewRoster.setActionCommand("viewRoster");
+        viewRoster.addActionListener(this);
+        JButton injuryReserve = new JButton("View injury reserve");
+        injuryReserve.setActionCommand("viewInjuryReserve");
+        injuryReserve.addActionListener(this);
+        playerButtonsPanel.add(addPlayer);
+        playerButtonsPanel.add(removePlayer);
+        playerButtonsPanel.add(selectPlayer);
+        playerButtonsPanel.add(viewRoster);
+        playerButtonsPanel.add(injuryReserve);
+        playerButtonsHelper();
+    }
+
+    private void playerButtonsHelper() {
+        JButton back = new JButton("Back");
+        back.setActionCommand("back");
+        back.addActionListener(this);
+        playerButtonsPanel.add(back);
     }
 
 
