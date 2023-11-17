@@ -29,6 +29,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     private JPanel buttonsPanel = new JPanel();
     private JPanel playerButtonsPanel = new JPanel();
     private JPanel standingsPanel = new JPanel();
+    private JPanel injuryPanel = new JPanel();
     private JPanel rosterPanel = new JPanel();
     private JPanel teamMenu = new JPanel();
     private JTextField leagueName = new JTextField();
@@ -49,6 +50,9 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     private JTextField steals;
     private JTextField blocks;
     private JTextField gamesPlayed;
+    private JTextField wins;
+    private JTextField losses;
+    private JTextField teamGamesPlayed;
     private JFrame leagueMenu = new JFrame();
     private JFrame success = new JFrame();
     private JFrame addTeam;
@@ -57,10 +61,13 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     private JFrame addPlayer;
     private JFrame removePlayer;
     private JFrame selectPlayer;
+    private JFrame editRecord;
     private JTable standings;
+    private JTable injuries;
     private JTable roster;
     private DefaultTableModel model;
     private DefaultTableModel rosterModel;
+    private DefaultTableModel injuryModel;
 
 
     // EFFECTS: creates a frame that holds the menu screen
@@ -85,6 +92,15 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         actionPerformedHelper(e);
         secondActionPerformedHelper(e);
         thirdActionPerformedHelper(e);
+        if (e.getActionCommand().equals("viewInjuryReserve")) {
+            displayInjuryReserve();
+        } else if (e.getActionCommand().equals("edit")) {
+            editWins();
+        } else if (e.getActionCommand().equals("nextWins")) {
+            editLosses();
+        } else if (e.getActionCommand().equals("submitRecord")) {
+            editTeamRecord();
+        }
     }
 
     private void actionPerformedHelper(ActionEvent e) {
@@ -120,6 +136,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
             playerButtonsPanel.setVisible(false);
             buttonsPanel.setVisible(true);
             rosterPanel.setVisible(false);
+            injuryPanel.setVisible(false);
             leagueMenu();
         } else if (e.getActionCommand().equals("viewRoster")) {
             displayPlayers();
@@ -347,7 +364,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     private void displayTeams() {
         standingsPanel.setLayout(new BorderLayout());
         standingsPanel.setBounds(0,119,600,531);
-        String[] categories = {"Team name", "Wins", "Losses", "Pct%"};
+        String[] categories = {"Team name", "Games played", "Wins", "Losses", "Pct%"};
 
         if (standings == null) {
             model = new DefaultTableModel(addTeamsToDisplay().toArray(new Object[addTeamsToDisplay().size()][]),
@@ -355,6 +372,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
             standings = new JTable(model);
             standingsPanel.add(new JScrollPane(standings));
             standings.setDefaultEditor(Object.class,null);
+            standings.getColumnModel().getColumn(0).setPreferredWidth(175);
         } else {
             model.setRowCount(0);
             for (Object[] team : addTeamsToDisplay()) {
@@ -367,11 +385,13 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         leagueMenu.revalidate();
     }
 
+
+
     // EFFECTS: adds each team as an object array stored in a list and returns it
     private ArrayList<Object[]> addTeamsToDisplay() {
         ArrayList<Object[]> data = new ArrayList<>();
         for (Team t : league.getTeams()) {
-            data.add(new Object[]{t.getTeamName(),t.getWins(),t.getLosses(),t.winPercentage()});
+            data.add(new Object[]{t.getTeamName(),t.getTeamGamesPlayed(), t.getWins(),t.getLosses(),t.winPercentage()});
         }
         return data;
     }
@@ -485,7 +505,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     // EFFECTS: creates a player menu
     private void playerMenu() {
         buttonsPanel.setVisible(false);
-        leagueMenu.setTitle("Team: " + selectTeamName.getText());
+        leagueMenu.setTitle("Team: " + team.getTeamName());
         selectTeamName.setText("");
         teamMenu.setSize(new Dimension(600,600));
         teamMenu.setLayout(null);
@@ -539,11 +559,11 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     // EFFECTS: creates a JTable that stores players as an 2-D object array if there is no JTable, otherwise clear rows
     //          and add all the players to each row again
     private void displayPlayers() {
+        injuryPanel.setVisible(false);
         rosterPanel.setLayout(new BorderLayout());
         rosterPanel.setBounds(0,119,600,531);
         String[] categories = {"Name", "Position", "#", "Height (cm)", "Weight (lbs)", "PPG", "RPG", "APG", "SPG",
                 "BPG", "GP"};
-
         if (roster == null) {
             rosterModel = new DefaultTableModel(addPlayersToDisplay().toArray(new Object[addPlayersToDisplay().size()][]
             ),
@@ -715,7 +735,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
             removePlayer.add(enterRemovePlayerName);
             removePlayer.add(removePlayerName);
             removePlayer.add(submitRemovePlayerName);
-            selectPlayer.getRootPane().setDefaultButton(submitRemovePlayerName);
+            removePlayer.getRootPane().setDefaultButton(submitRemovePlayerName);
             removePlayer.pack();
             removePlayer.setLocationRelativeTo(null);
             removePlayer.setResizable(false);
@@ -790,7 +810,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         JLabel enter = new JLabel();
         enter.setText("Enter latest amount of points scored");
         enter.setBounds(80,50,400,40);
-        addStatsHelper(points, "Next", "pointsNext");
+        addStatsHelper(selectPlayer, points, "Next", "pointsNext");
         selectPlayer.add(enter);
         points.setBounds(100,90,200,40);
     }
@@ -800,7 +820,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         JLabel enter = new JLabel();
         enter.setText("Enter latest amount of rebounds collected");
         enter.setBounds(65,50,400,40);
-        addStatsHelper(rebounds, "Next", "reboundsNext");
+        addStatsHelper(selectPlayer, rebounds, "Next", "reboundsNext");
         selectPlayer.add(enter);
         rebounds.setBounds(100,90,200,40);
     }
@@ -810,7 +830,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         JLabel enter = new JLabel();
         enter.setText("Enter latest amount of assists collected");
         enter.setBounds(70,50,400,40);
-        addStatsHelper(assists, "Next", "assistsNext");
+        addStatsHelper(selectPlayer, assists, "Next", "assistsNext");
         selectPlayer.add(enter);
         assists.setBounds(100,90,200,40);
     }
@@ -820,7 +840,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         JLabel enter = new JLabel();
         enter.setText("Enter latest amount of steals collected");
         enter.setBounds(70,50,400,40);
-        addStatsHelper(steals, "Next", "stealsNext");
+        addStatsHelper(selectPlayer, steals, "Next", "stealsNext");
         selectPlayer.add(enter);
         steals.setBounds(100,90,200,40);
     }
@@ -830,7 +850,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         JLabel enter = new JLabel();
         enter.setText("Enter latest amount of blocks collected");
         enter.setBounds(70,50,400,40);
-        addStatsHelper(blocks, "Next", "blocksNext");
+        addStatsHelper(selectPlayer, blocks, "Next", "blocksNext");
         selectPlayer.add(enter);
         blocks.setBounds(100,90,200,40);
     }
@@ -840,23 +860,23 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         JLabel enter = new JLabel();
         enter.setText("Enter latest amount of games played");
         enter.setBounds(80,50,400,40);
-        addStatsHelper(gamesPlayed, "Submit", "submitPlayerStats");
+        addStatsHelper(selectPlayer, gamesPlayed, "Submit", "submitPlayerStats");
         selectPlayer.add(enter);
         gamesPlayed.setBounds(100,90,200,40);
     }
 
-    private void addStatsHelper(JTextField stat, String buttonName, String chooseAction) {
-        selectPlayer.getContentPane().removeAll();
+    private void addStatsHelper(JFrame frame, JTextField stat, String buttonName, String chooseAction) {
+        frame.getContentPane().removeAll();
         stat.setBounds(100,90,200,40);
         JButton submit = new JButton(buttonName);
         submit.setActionCommand(chooseAction);
         submit.addActionListener(this);
         submit.setBounds(137,140,125,40);
-        selectPlayer.add(stat);
-        selectPlayer.add(submit);
-        selectPlayer.getRootPane().setDefaultButton(submit);
-        selectPlayer.revalidate();
-        selectPlayer.repaint();
+        frame.add(stat);
+        frame.add(submit);
+        frame.getRootPane().setDefaultButton(submit);
+        frame.revalidate();
+        frame.repaint();
     }
 
     private void editPlayerStats() {
@@ -870,6 +890,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
                     Integer.parseInt(blocks.getText()), Integer.parseInt(gamesPlayed.getText()));
             player.isPlayerHealthy(Boolean.parseBoolean(healthStatus.getText()));
             team.addPlayerInjuryReserve();
+            team.movePlayerOffInjuryReserve();
         }
     }
 
@@ -886,8 +907,112 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
                 return;
             }
         }
+        if (selectInjuredPlayer()) {
+            return;
+        }
         JOptionPane.showMessageDialog(null, "Player not found", "title",
                 JOptionPane.ERROR_MESSAGE);
+    }
+
+    private Boolean selectInjuredPlayer() {
+        for (Player p: team.getInjuryReserve()) {
+            if (p.getName().equalsIgnoreCase(selectPlayerName.getText())) {
+                player = p;
+                int answer = JOptionPane.showConfirmDialog(null, "Player selected: "
+                        + selectPlayerName.getText()
+                        + " has been selected!","title", JOptionPane.DEFAULT_OPTION);
+                if (answer == JOptionPane.OK_OPTION) {
+                    editHealthStatus();
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void displayInjuryReserve() {
+        rosterPanel.setVisible(false);
+        injuryPanel.setLayout(new BorderLayout());
+        injuryPanel.setBounds(0,119,600,531);
+        String[] categories = {"Name", "Position", "#", "Height (cm)", "Weight (lbs)", "PPG", "RPG", "APG", "SPG",
+                "BPG", "GP"};
+
+        if (injuries == null) {
+            injuryModel = new DefaultTableModel(addInjuredPlayersToDisplay().toArray(new Object[
+                    addInjuredPlayersToDisplay().size()][]),
+                    categories);
+            injuries = new JTable(injuryModel);
+            injuryPanel.add(new JScrollPane(injuries));
+            injuries.setDefaultEditor(Object.class,null);
+            injuries.getColumnModel().getColumn(0).setPreferredWidth(200);
+        } else {
+            injuryModel.setRowCount(0);
+            for (Object[] player : addInjuredPlayersToDisplay()) {
+                injuryModel.addRow(player);
+            }
+        }
+        injuryPanel.setVisible(true);
+        leagueMenu.add(injuryPanel);
+        leagueMenu.repaint();
+        leagueMenu.revalidate();
+    }
+
+
+    // EFFECTS: adds each player as an object array stored in a list and returns it
+    private ArrayList<Object[]> addInjuredPlayersToDisplay() {
+        ArrayList<Object[]> data = new ArrayList<>();
+        for (Player p : team.getInjuryReserve()) {
+            data.add(new Object[]{p.getName(), p.getPosition(), p.getJerseyNumber(), p.getHeight(), p.getWeight(),
+                    p.averagePoints(), p.averageRebounds(), p.averageAssists(), p.averageSteals(), p.averageBlocks(),
+                    p.getGamesPlayed()});
+        }
+        return data;
+    }
+
+    private void editWins() {
+        if (editRecord == null || !editRecord.isVisible()) {
+            editRecord = new JFrame();
+            editRecord.setLayout(null);
+            editRecord.setPreferredSize(new Dimension(400,300));
+            editRecord.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            wins = new JTextField();
+            wins.setBounds(100,90,200,40);
+            JButton submitWins = new JButton("Next");
+            submitWins.setActionCommand("nextWins");
+            submitWins.addActionListener(this);
+            submitWins.setBounds(137,140,125,40);
+            JLabel enterWins = new JLabel();
+            enterWins.setText("Enter latest amount of wins!");
+            enterWins.setBounds(110,50,200,40);
+            editRecord.add(enterWins);
+            editRecord.add(wins);
+            editRecord.add(submitWins);
+            editRecord.getRootPane().setDefaultButton(submitWins);
+            editRecord.pack();
+            editRecord.setLocationRelativeTo(null);
+            editRecord.setResizable(false);
+            editRecord.setVisible(true);
+        }
+    }
+
+    private void editLosses() {
+        losses =  new JTextField();
+        JLabel enter = new JLabel();
+        enter.setText("Enter latest amount of losses!");
+        enter.setBounds(105,50,400,40);
+        addStatsHelper(editRecord, losses, "Submit", "submitRecord");
+        editRecord.add(enter);
+        losses.setBounds(100,90,200,40);
+    }
+
+    private void editTeamRecord() {
+        int answer = JOptionPane.showConfirmDialog(null, "Team record updated: "
+                + team.getTeamName()
+                + " record has been updated","title", JOptionPane.DEFAULT_OPTION);
+        if (answer == JOptionPane.OK_OPTION) {
+            editRecord.setVisible(false);
+            team.teamRecord(Integer.parseInt(wins.getText()), Integer.parseInt(losses.getText()));
+        }
     }
 
 
