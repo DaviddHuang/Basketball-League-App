@@ -112,6 +112,7 @@ public class Team implements Writable {
             scoringLeader.add(leader);
             return true;
         }
+        scoringLeader.clear();
         return false;
     }
 
@@ -131,6 +132,7 @@ public class Team implements Writable {
             defensiveLeader.add(leader);
             return true;
         }
+        defensiveLeader.clear();
         return false;
     }
 

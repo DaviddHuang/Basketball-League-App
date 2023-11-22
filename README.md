@@ -33,3 +33,45 @@ with the same love for the sport as me.
 * As a user, I want to be able to create a player
 * As a user, I want to be able to save the state of the league including teams, players, stats, etc. in the menu
 * As a user, I want to be able to load the league from file in the menu from the state it was left at
+
+# Instructions for Grader
+To get out of the start menu of the application you must click the start button and enter a league name first. 
+After clicking the submit button:
+* You can generate the first required action related to the user story "adding multiple Xs to a Y" by clicking the add
+team button, typing in the team name and submitting, this will add the team to the league
+* You can generate the second required action related to the user story "adding multiple Xs to a Y" by clicking the
+remove team button, typing in the team name and submitting, this will remove the team from the league
+* You can find the panel in which all the Xs that have already been added to Ys are displayed by clicking the view teams
+button. This button must be clicked each time you add or remove a team to display the most current teams in the league
+* You can locate my visual component by running the GUI, as the background of the start menu is a jpeg image of a 
+basketball court
+* You can save the state of my application in the start menu by clicking save. If you are in the league menu you may 
+click main menu button to go back to the start menu and then click save. If you are in the team menu you may click the 
+back button and then the main menu button to go back to the start menu then click save to save the state of my 
+application.
+* You can load the state of my application in the start menu by clicking load. If you are in the league menu you may
+click main menu button to go back to the start menu and then click load. If you are in the team menu you may click the
+back button and then the main menu button to go back to the start menu then click load to save the state of my
+application.
+
+Other miscellaneous instructions:
+* The end season button must not be pressed unless at least two players which both must be on different teams (not on 
+the injury reserve) and their stats have been edited
+* When adding a player:
+  * Name must be inputted as a string
+  * Jersey number must be inputted as an int
+  * Height must be inputted as an int
+  * Weight must be inputted as a double
+* When editing a team record:
+  * Wins must be inputted as an int
+  * Losses must be inputted as an int
+* When adding a team, adding a player, adding a player to the injury reserve, removing a team, removing a player, 
+editing player stats, or editing team records, in order to view the most recent changes you must click view teams or
+view players as these do not auto update
+* In order to add players to a team you must click the select team button
+* In order to change a players stats you must be in the team menu and click the select player button
+* In order to change a teams record you must be in the team menu and click the edit team record button
+* In order to view all players on the injury reserve you must click the view injury reserve button inside the team menu
+* In order to view all players who are not injured you must click the view players button inside the team menu
+* In order to remove a player you must click the remove player button inside the team menu
+* In order to add a player you must click the add player button inside the team menu

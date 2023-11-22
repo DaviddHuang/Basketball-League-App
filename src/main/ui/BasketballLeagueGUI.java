@@ -15,6 +15,18 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+// Basketball league graphical user interface
+// Code is influenced by:
+// https://www.youtube.com/watch?v=Kmgo00avvEw&t=974s&ab_channel=BroCode
+// https://www.youtube.com/watch?v=skryksKiIK0&ab_channel=MukulSainiSkills
+// https://stackoverflow.com/questions/479523/jframe-maximize-window
+// https://stackoverflow.com/questions/1990817/how-to-make-a-jtable-non-editable
+// https://stackoverflow.com/questions/13731710/allowing-the-enter-key-to-press-the-submit-button-as-opposed-to-only-
+// using-mo
+// https://stackoverflow.com/questions/4640138/setting-the-focus-to-a-text-field
+// https://stackoverflow.com/questions/9572795/convert-list-to-array-in-java
+// https://stackoverflow.com/questions/5585779/how-do-i-convert-a-string-to-an-int-in-java
+// https://stackoverflow.com/questions/6578205/swing-jlabel-text-change-on-the-running-application
 public class BasketballLeagueGUI extends JFrame implements ActionListener {
     private static final String FILE_DIRECTORY = "./data/league.json";
     private League league;
@@ -52,7 +64,6 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     private JTextField gamesPlayed;
     private JTextField wins;
     private JTextField losses;
-    private JTextField teamGamesPlayed;
     private JFrame leagueMenu = new JFrame();
     private JFrame success = new JFrame();
     private JFrame addTeam;
@@ -62,6 +73,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     private JFrame removePlayer;
     private JFrame selectPlayer;
     private JFrame editRecord;
+    private JFrame endSeason;
     private JTable standings;
     private JTable injuries;
     private JTable roster;
@@ -77,9 +89,16 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         setSize(new Dimension(400,300));
+        Dimension windowSize = getSize();
+        ImageIcon startScreenIcon = new ImageIcon(new ImageIcon("data/basketballCourt.jpeg")
+                .getImage().getScaledInstance(windowSize.width, windowSize.height, Image.SCALE_DEFAULT));
+        JLabel label = new JLabel();
+        label.setIcon(startScreenIcon);
+        label.setBounds(0,0, windowSize.width, windowSize.height);
         menuPanel();
 
         add(startScreen);
+        startScreen.add(label);
         setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
@@ -100,9 +119,13 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
             editLosses();
         } else if (e.getActionCommand().equals("submitRecord")) {
             editTeamRecord();
+        } else if (e.getActionCommand().equals("end")) {
+            endSeasonMenu();
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: determines which action performed when a specific button is pressed
     private void actionPerformedHelper(ActionEvent e) {
         if (e.getActionCommand().equals("startButton")) {
             startApp();
@@ -129,6 +152,8 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: determines which action performed when a specific button is pressed
     private void secondActionPerformedHelper(ActionEvent e) {
         if (e.getActionCommand().equals("submitSelectTeam")) {
             selectTeam();
@@ -155,6 +180,8 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: determines which action performed when a specific button is pressed
     private void thirdActionPerformedHelper(ActionEvent e) {
         if (e.getActionCommand().equals("removePlayer")) {
             removePlayerMenu();
@@ -202,9 +229,11 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         startScreen.add(start);
         startScreen.add(save);
         startScreen.add(load);
+        startScreen.setFocusable(true);
         startScreen.setVisible(true);
     }
 
+    // MODIFIES: this
     // EFFECTS: creates a new panel to submit the name of the league
     private void startApp() {
         startScreen.setVisible(false);
@@ -223,10 +252,12 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         startMenu.add(enterName);
         startMenu.add(leagueName);
         startMenu.add(submitLeague);
+        getRootPane().setDefaultButton(submitLeague);
         add(startMenu);
     }
 
-    // EFFECTS: creates a league menu
+    // MODIFIES: this
+    // EFFECTS: creates a league menu with buttons for specific actions
     private void leagueMenu() {
         leagueName.setText("");
         success.setVisible(false);
@@ -242,8 +273,10 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         startScreen.setVisible(false);
         leagueMenu.setLocationRelativeTo(null);
         leagueMenu.setVisible(true);
+        leagueMenu.setFocusable(true);
     }
 
+    // MODIFIES: this
     // EFFECTS: helper method to initialize all the buttons in leagueMenu
     private void leagueButtons() {
         buttonsPanel.removeAll();
@@ -271,6 +304,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         menuButton();
     }
 
+    // MODIFIES: this
     // EFFECTS: helper method to initialize buttons in leagueMenu
     private void menuButton() {
         JButton menu = new JButton("Main menu");
@@ -311,6 +345,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: creates a team menu
     private void addTeamMenu() {
         if (addTeam == null || !addTeam.isVisible()) {
@@ -341,21 +376,38 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     // MODIFIES: this
     // EFFECTS: creates a JOption pane that adds a team when OK is clicked
     private void addTeam() {
-        int answer = JOptionPane.showConfirmDialog(null, "Team added: "
-                + teamName.getText()
-                + " has been created!","title", JOptionPane.DEFAULT_OPTION);
-        if (answer == JOptionPane.OK_OPTION) {
-            addTeam.setVisible(false);
-            team = new Team(teamName.getText());
-            league.addTeam(team);
+        team = new Team(teamName.getText());
+        if (!league.addTeam(team)) {
+            JOptionPane.showMessageDialog(null, "Team cannot be added: team name is"
+                            + " already taken", "title", JOptionPane.ERROR_MESSAGE);
+            addTeam.dispose();
+            addTeamMenu();
+        } else {
+            int answer = JOptionPane.showConfirmDialog(null, "Team added: "
+                    + teamName.getText()
+                    + " has been created!", "title", JOptionPane.DEFAULT_OPTION);
+            if (answer == JOptionPane.OK_OPTION) {
+                addTeam.setVisible(false);
+            }
         }
     }
 
     // EFFECTS: returns back to the main menu
     private void menuVisibility() {
+        if (removeTeam != null) {
+            removeTeam.dispose();
+        }
+        if (selectTeam != null) {
+            selectTeam.dispose();
+        }
+        if (addTeam != null) {
+            addTeam.dispose();
+        }
         leagueMenu.setVisible(false);
+        setLocationRelativeTo(null);
         setVisible(true);
         startScreen.setVisible(true);
+        standingsPanel.setVisible(false);
     }
 
     // MODIFIES: this
@@ -408,7 +460,8 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         }
     }
 
-    // EFFECTS: creates a removeTeamMenu
+    // MODIFIES: this
+    // EFFECTS: creates a removeTeamMenu to remove specific team
     private void removeTeamMenu() {
         if (removeTeam == null || !removeTeam.isVisible()) {
             removeTeam = new JFrame();
@@ -454,7 +507,8 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
                 JOptionPane.ERROR_MESSAGE);
     }
 
-    // EFFECTS: creates a selectTeamMenu
+    // MODIFIES: this
+    // EFFECTS: creates a selectTeamMenu to select a specific player
     private void selectTeamMenu() {
         if (selectTeam == null || !selectTeam.isVisible()) {
             selectTeam = new JFrame();
@@ -502,6 +556,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
                 JOptionPane.ERROR_MESSAGE);
     }
 
+    // MODIFIES: this
     // EFFECTS: creates a player menu
     private void playerMenu() {
         buttonsPanel.setVisible(false);
@@ -518,6 +573,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         leagueMenu.repaint();
     }
 
+    // MODIFIES: this
     // EFFECTS: helper method to initialize all the buttons in playerMenu
     private void playerButtons() {
         playerButtonsPanel.removeAll();
@@ -544,6 +600,8 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         playerButtonsHelper();
     }
 
+    // MODIFIES: this
+    // EFFECTS: helper method to initialize all buttons in playerMenu
     private void playerButtonsHelper() {
         JButton edit = new JButton("Edit Team Record");
         edit.setActionCommand("edit");
@@ -571,7 +629,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
             roster = new JTable(rosterModel);
             rosterPanel.add(new JScrollPane(roster));
             roster.setDefaultEditor(Object.class,null);
-            roster.getColumnModel().getColumn(0).setPreferredWidth(200);
+            setRosterTableColumns(roster);
         } else {
             rosterModel.setRowCount(0);
             for (Object[] player : addPlayersToDisplay()) {
@@ -582,6 +640,15 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         leagueMenu.add(rosterPanel);
         leagueMenu.repaint();
         leagueMenu.revalidate();
+    }
+
+    // EFFECTS: sets the preferred width of the name, position, #, height, and weight columns
+    private void setRosterTableColumns(JTable table) {
+        table.getColumnModel().getColumn(0).setPreferredWidth(200);
+        table.getColumnModel().getColumn(1).setPreferredWidth(100);
+        table.getColumnModel().getColumn(2).setPreferredWidth(50);
+        table.getColumnModel().getColumn(3).setPreferredWidth(125);
+        table.getColumnModel().getColumn(4).setPreferredWidth(125);
     }
 
     // EFFECTS: adds each player as an object array stored in a list and returns it
@@ -595,6 +662,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         return data;
     }
 
+    // MODIFIES: this
     // EFFECTS: creates a player menu
     private void addPlayerMenu() {
         if (addPlayer == null || !addPlayer.isVisible()) {
@@ -622,6 +690,8 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: clears the addPlayer frame and creates a menu to add a text field to enter the player's position
     private void addPosition() {
         addPlayer.getContentPane().removeAll();
         positionName =  new JTextField();
@@ -635,12 +705,15 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         enterPositionName.setBounds(145,50,200,40);
         addPlayer.add(positionName);
         addPlayer.add(submitPositionName);
+        positionName.requestFocus();
         addPlayer.add(enterPositionName);
         addPlayer.getRootPane().setDefaultButton(submitPositionName);
         addPlayer.revalidate();
         addPlayer.repaint();
     }
 
+    // MODIFIES: this
+    // EFFECTS: clears the addPlayer frame and creates a menu to add a text field to enter the player's jersey number
     private void addJerseyNumber() {
         addPlayer.getContentPane().removeAll();
         jerseyNumber =  new JTextField();
@@ -651,15 +724,18 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         submitJerseyNumber.setBounds(137,140,125,40);
         JLabel enterJerseyNumber = new JLabel();
         enterJerseyNumber.setText("Enter Jersey Number!");
-        enterJerseyNumber.setBounds(145,50,200,40);
+        enterJerseyNumber.setBounds(130,50,200,40);
         addPlayer.add(jerseyNumber);
         addPlayer.add(submitJerseyNumber);
+        jerseyNumber.requestFocus();
         addPlayer.add(enterJerseyNumber);
         addPlayer.getRootPane().setDefaultButton(submitJerseyNumber);
         addPlayer.revalidate();
         addPlayer.repaint();
     }
 
+    // MODIFIES: this
+    // EFFECTS: clears the addPlayer frame and creates a menu to add a text field to enter the player's height
     private void addHeight() {
         addPlayer.getContentPane().removeAll();
         height =  new JTextField();
@@ -673,12 +749,15 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         enterHeight.setBounds(145,50,200,40);
         addPlayer.add(height);
         addPlayer.add(submitHeight);
+        height.requestFocus();
         addPlayer.add(enterHeight);
         addPlayer.getRootPane().setDefaultButton(submitHeight);
         addPlayer.revalidate();
         addPlayer.repaint();
     }
 
+    // MODIFIES: this
+    // EFFECTS: clears the addPlayer frame and creates a menu to add a text field to enter the player's weight
     private void addWeight() {
         addPlayer.getContentPane().removeAll();
         weight =  new JTextField();
@@ -692,12 +771,15 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         enterWeight.setBounds(145,50,200,40);
         addPlayer.add(weight);
         addPlayer.add(submitWeight);
+        weight.requestFocus();
         addPlayer.add(enterWeight);
         addPlayer.getRootPane().setDefaultButton(submitWeight);
         addPlayer.revalidate();
         addPlayer.repaint();
     }
 
+    // EFFECTS: creates a player if the player added has a unique jersey number, and displays a JOption plane and
+    //          clears the addPlayer window when OK is clicked
     private void addPlayer() {
         player = new Player(playerName.getText(), positionName.getText(),
                 Integer.parseInt(jerseyNumber.getText()),
@@ -717,6 +799,8 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates a remove player menu that allows user to remove a specific player
     private void removePlayerMenu() {
         if (removePlayer == null || !removePlayer.isVisible()) {
             removePlayer = new JFrame();
@@ -743,10 +827,14 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         }
     }
 
+    // EFFECTS: removes player from roster or injury reserve if the player name matches the user entered
+    //          input in removePlayerName text field
     private void removePlayer() {
         for (Player p: team.getRoster()) {
             if (p.getName().equalsIgnoreCase(removePlayerName.getText())) {
                 team.removePlayer(removePlayerName.getText());
+                team.calculateDefensivePlayer();
+                team.calculateMostValuablePlayer();
                 int answer = JOptionPane.showConfirmDialog(null, "Player removed: "
                         + removePlayerName.getText()
                         + " has been removed!","title", JOptionPane.DEFAULT_OPTION);
@@ -756,10 +844,35 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
                 return;
             }
         }
+        if (removePlayerInjuryReserve()) {
+            return;
+        }
         JOptionPane.showMessageDialog(null, "Player not found", "title",
                 JOptionPane.ERROR_MESSAGE);
     }
 
+    // EFFECTS: helper method that removes player from injury reserve if player name matches the user entered input in
+    //          removePlayerName text field
+    private Boolean removePlayerInjuryReserve() {
+        for (Player p: team.getInjuryReserve()) {
+            if (p.getName().equalsIgnoreCase(removePlayerName.getText())) {
+                team.removePlayer(removePlayerName.getText());
+                team.calculateDefensivePlayer();
+                team.calculateMostValuablePlayer();
+                int answer = JOptionPane.showConfirmDialog(null, "Player removed: "
+                        + removePlayerName.getText()
+                        + " has been removed!","title", JOptionPane.DEFAULT_OPTION);
+                if (answer == JOptionPane.OK_OPTION) {
+                    removePlayer.setVisible(false);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: creates a select player menu that allows user to select a specific player from a team
     private void selectPlayerMenu() {
         if (selectPlayer == null || !selectPlayer.isVisible()) {
             selectPlayer = new JFrame();
@@ -786,6 +899,9 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: clears the select player frame and creates a new text field to allow for user input of player health
+    //          status
     private void editHealthStatus() {
         selectPlayer.getContentPane().removeAll();
         healthStatus =  new JTextField();
@@ -795,16 +911,19 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         submitHealthStatus.addActionListener(this);
         submitHealthStatus.setBounds(137,140,125,40);
         JLabel enterHealthStatus = new JLabel();
-        enterHealthStatus.setText("Enter health status (True = health | False = injured)");
+        enterHealthStatus.setText("Enter health status (True = healthy | False = injured)");
         enterHealthStatus.setBounds(40,50,400,40);
         selectPlayer.add(healthStatus);
         selectPlayer.add(submitHealthStatus);
+        healthStatus.requestFocus();
         selectPlayer.add(enterHealthStatus);
         selectPlayer.getRootPane().setDefaultButton(submitHealthStatus);
         selectPlayer.revalidate();
         selectPlayer.repaint();
     }
 
+    // MODIFIES: this
+    // EFFECTS: clears the select player frame and creates a new text field to allow for user input of player points
     private void editPoints() {
         points =  new JTextField();
         JLabel enter = new JLabel();
@@ -812,9 +931,12 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         enter.setBounds(80,50,400,40);
         addStatsHelper(selectPlayer, points, "Next", "pointsNext");
         selectPlayer.add(enter);
+        points.requestFocus();
         points.setBounds(100,90,200,40);
     }
 
+    // MODIFIES: this
+    // EFFECTS: clears the select player frame and creates a new text field to allow for user input of player rebounds
     private void editRebounds() {
         rebounds =  new JTextField();
         JLabel enter = new JLabel();
@@ -822,9 +944,12 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         enter.setBounds(65,50,400,40);
         addStatsHelper(selectPlayer, rebounds, "Next", "reboundsNext");
         selectPlayer.add(enter);
+        rebounds.requestFocus();
         rebounds.setBounds(100,90,200,40);
     }
 
+    // MODIFIES: this
+    // EFFECTS: clears the select player frame and creates a new text field to allow for user input of player assists
     private void editAssists() {
         assists =  new JTextField();
         JLabel enter = new JLabel();
@@ -832,9 +957,12 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         enter.setBounds(70,50,400,40);
         addStatsHelper(selectPlayer, assists, "Next", "assistsNext");
         selectPlayer.add(enter);
+        assists.requestFocus();
         assists.setBounds(100,90,200,40);
     }
 
+    // MODIFIES: this
+    // EFFECTS: clears the select player frame and creates a new text field to allow for user input of player steals
     private void editSteals() {
         steals =  new JTextField();
         JLabel enter = new JLabel();
@@ -842,9 +970,12 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         enter.setBounds(70,50,400,40);
         addStatsHelper(selectPlayer, steals, "Next", "stealsNext");
         selectPlayer.add(enter);
+        steals.requestFocus();
         steals.setBounds(100,90,200,40);
     }
 
+    // MODIFIES: this
+    // EFFECTS: clears the select player frame and creates a new text field to allow for user input of player blocks
     private void editBlocks() {
         blocks =  new JTextField();
         JLabel enter = new JLabel();
@@ -852,9 +983,13 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         enter.setBounds(70,50,400,40);
         addStatsHelper(selectPlayer, blocks, "Next", "blocksNext");
         selectPlayer.add(enter);
+        blocks.requestFocus();
         blocks.setBounds(100,90,200,40);
     }
 
+    // MODIFIES: this
+    // EFFECTS: clears the select player frame and creates a new text field to allow for user input of player games
+    //          played
     private void editGamesPlayed() {
         gamesPlayed =  new JTextField();
         JLabel enter = new JLabel();
@@ -862,9 +997,13 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         enter.setBounds(80,50,400,40);
         addStatsHelper(selectPlayer, gamesPlayed, "Submit", "submitPlayerStats");
         selectPlayer.add(enter);
+        gamesPlayed.requestFocus();
         gamesPlayed.setBounds(100,90,200,40);
     }
 
+    // MODIFIES: this
+    // EFFECTS: helper method that allows that clears given frame, adds text field, changes button name, and gives
+    //          button an action command so player stats can be entered
     private void addStatsHelper(JFrame frame, JTextField stat, String buttonName, String chooseAction) {
         frame.getContentPane().removeAll();
         stat.setBounds(100,90,200,40);
@@ -879,6 +1018,8 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         frame.repaint();
     }
 
+    // EFFECTS: updates player stats and displays JOption upon successful update, if OK is clicked selectPlayer frame
+    //          is hidden and player stats are updated
     private void editPlayerStats() {
         int answer = JOptionPane.showConfirmDialog(null, "Stats updated: "
                     + selectPlayerName.getText()
@@ -891,9 +1032,14 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
             player.isPlayerHealthy(Boolean.parseBoolean(healthStatus.getText()));
             team.addPlayerInjuryReserve();
             team.movePlayerOffInjuryReserve();
+            team.calculateMostValuablePlayer();
+            team.calculateDefensivePlayer();
         }
     }
 
+    // EFFECTS: if player name is equal to user entered input in selectPlayerName text field, player is changed to
+    //          selected player in roster or injury reserve and JOption pane appears, if OK is clicked display start of
+    //          edit player stats
     private void selectPlayer() {
         for (Player p: team.getRoster()) {
             if (p.getName().equalsIgnoreCase(selectPlayerName.getText())) {
@@ -914,6 +1060,9 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
                 JOptionPane.ERROR_MESSAGE);
     }
 
+    // EFFECTS: if player name is equal to user entered input in selectPlayerName text field, player is changed to
+    //          selected player in injury reserve and JOption pane appears, if OK is clicked display start of
+    //          edit player stats
     private Boolean selectInjuredPlayer() {
         for (Player p: team.getInjuryReserve()) {
             if (p.getName().equalsIgnoreCase(selectPlayerName.getText())) {
@@ -930,6 +1079,9 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         return false;
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates a JTable that stores injured players as an 2-D object array if there is no JTable created,
+    // otherwise clear rows and add all the injured players to each row again
     private void displayInjuryReserve() {
         rosterPanel.setVisible(false);
         injuryPanel.setLayout(new BorderLayout());
@@ -944,7 +1096,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
             injuries = new JTable(injuryModel);
             injuryPanel.add(new JScrollPane(injuries));
             injuries.setDefaultEditor(Object.class,null);
-            injuries.getColumnModel().getColumn(0).setPreferredWidth(200);
+            setRosterTableColumns(injuries);
         } else {
             injuryModel.setRowCount(0);
             for (Object[] player : addInjuredPlayersToDisplay()) {
@@ -958,7 +1110,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
     }
 
 
-    // EFFECTS: adds each player as an object array stored in a list and returns it
+    // EFFECTS: adds each injured player as an object array stored in a list and returns it
     private ArrayList<Object[]> addInjuredPlayersToDisplay() {
         ArrayList<Object[]> data = new ArrayList<>();
         for (Player p : team.getInjuryReserve()) {
@@ -969,6 +1121,8 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         return data;
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates a new frame that contains a menu to edit wins through a text field
     private void editWins() {
         if (editRecord == null || !editRecord.isVisible()) {
             editRecord = new JFrame();
@@ -995,6 +1149,8 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates a new frame that contains a menu to edit losses through a text field
     private void editLosses() {
         losses =  new JTextField();
         JLabel enter = new JLabel();
@@ -1002,9 +1158,11 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         enter.setBounds(105,50,400,40);
         addStatsHelper(editRecord, losses, "Submit", "submitRecord");
         editRecord.add(enter);
+        losses.requestFocus();
         losses.setBounds(100,90,200,40);
     }
 
+    // EFFECTS: displays JOptionPane for successful team record update, if OK is clicked team record is updated
     private void editTeamRecord() {
         int answer = JOptionPane.showConfirmDialog(null, "Team record updated: "
                 + team.getTeamName()
@@ -1015,7 +1173,81 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         }
     }
 
+    // EFFECTS: displays JOptionPane for confirmation to end season, if YES is clicked calculate and display end of
+    //          season awards
+    private void endSeasonMenu() {
+        int answer = JOptionPane.showConfirmDialog(null,
+                "Are you sure you want to end the season?","title", JOptionPane.YES_NO_OPTION);
+        if (answer == JOptionPane.YES_OPTION) {
+            league.calculateLeagueWinner();
+            league.calculateLeagueMostValuablePlayer();
+            league.calculateLeagueDefensivePlayer();
+            endSeason();
+        }
+    }
 
+    // MODIFIES: this
+    // EFFECTS: creates a new frame with gif set as the background and displays end of season awards
+    private void endSeason() {
+        if (endSeason == null || !endSeason.isVisible()) {
+            endSeason = new JFrame();
+            endSeason.setLayout(null);
+            Dimension windowSize = Toolkit.getDefaultToolkit().getScreenSize();
+            ImageIcon gif = new ImageIcon(new ImageIcon("data/endSeason.gif")
+                    .getImage().getScaledInstance(windowSize.width, windowSize.height, Image.SCALE_DEFAULT));
+            JLabel label = new JLabel();
+            label.setIcon(gif);
+            label.setBounds(0,0, windowSize.width, windowSize.height);
+            endSeasonHelper();
+            endSeason.add(label);
+            endSeason.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            endSeason.setUndecorated(false);
+            endSeason.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            endSeason.pack();
+            endSeason.setLocationRelativeTo(null);
+            endSeason.setResizable(false);
+            endSeason.setVisible(true);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: creates JLabels for league winner, league MVP, and league DPOY added to the endSeason frame
+    private void endSeasonHelper() {
+        Team t = league.getLeagueWinner().get(0);
+        Player p = league.getLeagueMostValuablePlayer().get(0);
+        Player d = league.getLeagueDefensivePlayer().get(0);
+        JLabel congrats = new JLabel();
+        congrats.setText("Congratulations on an amazing season!");
+        congrats.setFont(new Font("Calibri", Font.BOLD, 50));
+        congrats.setBounds(225,240,2000,100);
+        JLabel leagueWinner = new JLabel();
+        leagueWinner.setText("League Winner: " + t.getTeamName() + " ||" + " Wins: " + t.getWins() + " ||"
+                + " Losses: " + t.getLosses() + " ||" + " PCT: " + t.winPercentage());
+        leagueWinner.setFont(new Font("Calibri", Font.PLAIN, 25));
+        leagueWinner.setBounds(15, 320, 2000, 100);
+        JLabel leagueMVP = new JLabel();
+        endSeasonStatsHelper(leagueMVP, p, "MVP");
+        leagueMVP.setBounds(15, 400, 2000, 100);
+        JLabel leagueDefensive = new JLabel();
+        endSeasonStatsHelper(leagueDefensive, d, "DPOY");
+        leagueDefensive.setBounds(15, 480, 2000, 100);
+        endSeason.add(congrats);
+        endSeason.add(leagueWinner);
+        endSeason.add(leagueMVP);
+        endSeason.add(leagueDefensive);
+    }
+
+    // EFFECTS: sets the label text to display stats of league MVP and league DPOY
+    private void endSeasonStatsHelper(JLabel label, Player p, String award) {
+        label.setText("League " + award + ": " + p.getName() + " ||" + " Position: " + p.getPosition()
+                + " ||" + " PPG: " + p.averagePoints() + " ||"
+                + " RPG: " + p.averageRebounds() + " ||" + " APG: " + p.averageAssists() + " ||" + " SPG: "
+                + p.averageSteals() + " ||" + " BPG: " + p.averageBlocks() + " ||" + " GP: " + p.getGamesPlayed());
+        label.setFont(new Font("Calibri", Font.PLAIN, 25));
+    }
+
+
+    // initializes the basketballLeagueGUI
     public static void main(String[] args) {
         new BasketballLeagueGUI();
     }
