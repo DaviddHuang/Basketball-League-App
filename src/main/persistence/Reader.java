@@ -1,8 +1,6 @@
 package persistence;
 
-import model.League;
-import model.Player;
-import model.Team;
+import model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -44,6 +42,7 @@ public class Reader {
     private League parseLeague(JSONObject jsonObject) {
         String name = jsonObject.getString("League name");
         League l = new League(name);
+        EventLog.getInstance().logEvent(new Event("Loading: " + l.getLeagueName() + " league"));
         addTeam(l, jsonObject);
         l.calculateLeagueMostValuablePlayer();
         l.calculateLeagueDefensivePlayer();
@@ -76,7 +75,7 @@ public class Reader {
         team.setWins(wins);
         team.setLosses(losses);
         team.setTeamGamesPlayed(gamesPlayed);
-        l.addTeam(team);
+        l.addTeamNoLog(team);
         return team;
     }
 

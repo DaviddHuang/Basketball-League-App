@@ -1,5 +1,7 @@
 package persistence;
 
+import model.Event;
+import model.EventLog;
 import model.League;
 import model.Team;
 import org.json.JSONObject;
@@ -30,6 +32,7 @@ public class Writer {
     public void write(League l) {
         JSONObject json = l.toJson();
         saveFile(json.toString(4));
+        EventLog.getInstance().logEvent(new Event("Saving: " + l.getLeagueName() + " league"));
     }
 
     // MODIFIES: this

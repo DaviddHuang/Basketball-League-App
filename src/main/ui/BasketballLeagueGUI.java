@@ -1,8 +1,10 @@
 package ui;
 
+import model.EventLog;
 import model.League;
 import model.Player;
 import model.Team;
+import model.Event;
 import persistence.Reader;
 import persistence.Writer;
 
@@ -11,6 +13,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,7 +31,7 @@ import java.util.ArrayList;
 // https://stackoverflow.com/questions/9572795/convert-list-to-array-in-java
 // https://stackoverflow.com/questions/5585779/how-do-i-convert-a-string-to-an-int-in-java
 // https://stackoverflow.com/questions/6578205/swing-jlabel-text-change-on-the-running-application
-public class BasketballLeagueGUI extends JFrame implements ActionListener {
+public class BasketballLeagueGUI extends JFrame implements ActionListener, WindowListener {
     private static final String FILE_DIRECTORY = "./data/league.json";
     private League league;
     private Player player;
@@ -98,6 +102,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         menuPanel();
 
         add(startScreen);
+        addWindowListener(this);
         startScreen.add(label);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -269,6 +274,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         buttonsPanel.setBounds(0,15,600,65);
         leagueButtons();
         leagueMenu.add(buttonsPanel);
+        leagueMenu.addWindowListener(this);
         startMenu.setVisible(false);
         startScreen.setVisible(false);
         leagueMenu.setLocationRelativeTo(null);
@@ -431,6 +437,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
                 model.addRow(team);
             }
         }
+        league.displayTeamsLogEvent();
         standingsPanel.setVisible(true);
         leagueMenu.add(standingsPanel);
         leagueMenu.repaint();
@@ -1246,6 +1253,45 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener {
         label.setFont(new Font("Calibri", Font.PLAIN, 25));
     }
 
+    @Override
+    public void windowOpened(WindowEvent e) {
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        printLogToConsole(EventLog.getInstance());
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
+    }
+
+    private void printLogToConsole(EventLog el) {
+        System.out.println("Event Log:\n ");
+        for (Event next : el) {
+            System.out.println(next.toString() + "\n");
+        }
+    }
 
     // initializes the basketballLeagueGUI
     public static void main(String[] args) {

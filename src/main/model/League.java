@@ -39,6 +39,18 @@ public class League implements Writable {
             }
         }
         league.add(team);
+        EventLog.getInstance().logEvent(new Event(team.getTeamName() + " added to: " + getLeagueName()
+                + " league"));
+        return true;
+    }
+
+    public boolean addTeamNoLog(Team team) {
+        for (Team t : league) {
+            if (t.getTeamName().equals(team.getTeamName())) {
+                return false;
+            }
+        }
+        league.add(team);
         return true;
     }
 
@@ -50,6 +62,8 @@ public class League implements Writable {
         for (Team t : league) {
             if (t.getTeamName().equalsIgnoreCase(name)) {
                 league.remove(t);
+                EventLog.getInstance().logEvent(new Event(t.getTeamName() + " removed from: "
+                        + getLeagueName() + " league"));
                 return true;
             }
         }
@@ -114,6 +128,10 @@ public class League implements Writable {
             return true;
         }
         return false;
+    }
+
+    public void displayTeamsLogEvent() {
+        EventLog.getInstance().logEvent(new Event("Displaying teams in " + getLeagueName() + " league"));
     }
 
     // EFFECTS: changes the status of the season to the given status
