@@ -3,6 +3,9 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LeagueTest {
@@ -29,6 +32,14 @@ public class LeagueTest {
     @Test
     void testAddTeam() {
         assertTrue(testLeague.addTeam(testTeam1));
+        assertEquals(1, testLeague.getAmountOfTeams());
+        assertTrue(testLeague.getTeams().contains(testTeam1));
+    }
+
+    @Test
+    void testAddTeamNoLogFail() {
+        testLeague.addTeamNoLog(testTeam1);
+        assertFalse(testLeague.addTeamNoLog(testTeam1));
         assertEquals(1, testLeague.getAmountOfTeams());
         assertTrue(testLeague.getTeams().contains(testTeam1));
     }
