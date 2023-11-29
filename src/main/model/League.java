@@ -131,7 +131,7 @@ public class League implements Writable {
     }
 
     public void displayTeamsLogEvent() {
-        EventLog.getInstance().logEvent(new Event("Displaying teams in " + getLeagueName() + " league"));
+        EventLog.getInstance().logEvent(new Event("Displaying: all teams in " + getLeagueName() + " league"));
     }
 
     // EFFECTS: changes the status of the season to the given status

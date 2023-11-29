@@ -551,6 +551,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener, Windo
                 int answer = JOptionPane.showConfirmDialog(null, "Team selected: "
                         + selectTeamName.getText()
                         + " has been selected!","title", JOptionPane.DEFAULT_OPTION);
+                EventLog.getInstance().logEvent(new Event("Team selected: " + t.getTeamName()));
                 if (answer == JOptionPane.OK_OPTION) {
                     selectTeam.setVisible(false);
                     playerMenu();
@@ -1287,7 +1288,6 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener, Windo
     }
 
     private void printLogToConsole(EventLog el) {
-        System.out.println("Event Log:\n ");
         for (Event next : el) {
             System.out.println(next.toString() + "\n");
         }

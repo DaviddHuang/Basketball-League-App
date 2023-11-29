@@ -75,3 +75,36 @@ view players as these do not auto update
 * In order to view all players who are not injured you must click the view players button inside the team menu
 * In order to remove a player you must click the remove player button inside the team menu
 * In order to add a player you must click the add player button inside the team menu
+# Phase 4:
+
+
+### Phase 4: Task 2
+Sample of log events in BasketballLeagueGUI
+
+![img.png](img.png)
+
+
+### Phase 4: Task 3
+UML Class Diagram
+![img_1.png](img_1.png)
+
+#### Refactoring Possibilities:
+In my current UML diagram, although the design seems simple, there are many different refactoring 
+possibilities. One thing that my design suffers from is a lack of cohesion. Currently, there are three main classes 
+which create the core of my application, those being League, Team, and Player. These three classes do not follow the
+single responsibility principle very well. For example, in my player class, I have various methods which do calculations
+for the player such as calculating their average points, rebounds, assists, etc. However, in order to increase
+cohesion, I should have made a separate class that does all the calculations and stat related stuff. This also goes for
+all the statistic calculations in League and Team such as calculating the MVP, DPOY, league winner, team mvp, etc.
+Furthermore, this extends to my GUI class which there were certain methods that should have been removed from that class
+and added into another. For example, my GUI has a method which selects a team, this could easily be moved into the team
+class which would have highly improved the cohesion in my GUI. Additionally, my GUI had many repetitive methods when I
+would create things such as league menu, team menu, and player menu. This made for a lot of duplicated code and a lot of
+fields which is evident in my GUI class. These are the biggest refactoring possibility present in my
+current design and would have greatly improved the cohesion in my design. By doing this refactoring, my design would
+follow the single responsibility principle.
+
+
+
+
+
