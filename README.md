@@ -86,7 +86,7 @@ Sample of log events in BasketballLeagueGUI
 
 ### Phase 4: Task 3
 UML Class Diagram
-![img_1.png](img_1.png)
+![img_3.png](img_3.png)
 
 #### Refactoring Possibilities:
 In my current UML diagram, although the design seems simple, there are many different refactoring 
