@@ -44,9 +44,6 @@ public class Reader {
         League l = new League(name);
         EventLog.getInstance().logEvent(new Event("Loading: " + l.getLeagueName() + " league"));
         addTeam(l, jsonObject);
-        l.calculateLeagueMostValuablePlayer();
-        l.calculateLeagueDefensivePlayer();
-        l.calculateLeagueWinner();
         return l;
     }
 

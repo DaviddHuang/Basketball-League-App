@@ -130,6 +130,7 @@ public class League implements Writable {
         return false;
     }
 
+    // EFFECTS: creates a new event log to display teams in league
     public void displayTeamsLogEvent() {
         EventLog.getInstance().logEvent(new Event("Displaying: all teams in " + getLeagueName() + " league"));
     }
