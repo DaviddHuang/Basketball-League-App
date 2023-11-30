@@ -1254,39 +1254,47 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener, Windo
         label.setFont(new Font("Calibri", Font.PLAIN, 25));
     }
 
+    // EFFECTS: does action when window is open
     @Override
     public void windowOpened(WindowEvent e) {
     }
 
+    // EFFECTS: does action when window is closing
     @Override
     public void windowClosing(WindowEvent e) {
         printLogToConsole(EventLog.getInstance());
     }
 
+    // EFFECTS: does action when window is closed
     @Override
     public void windowClosed(WindowEvent e) {
     }
 
+    // EFFECTS: does action when window is iconified
     @Override
     public void windowIconified(WindowEvent e) {
 
     }
 
+    // EFFECTS: does action when window is deiconified
     @Override
     public void windowDeiconified(WindowEvent e) {
 
     }
 
+    // EFFECTS: does action when window is activated
     @Override
     public void windowActivated(WindowEvent e) {
 
     }
 
+    // EFFECTS: does action when window is deactivated
     @Override
     public void windowDeactivated(WindowEvent e) {
 
     }
 
+    // EFFECTS: prints event log to console
     private void printLogToConsole(EventLog el) {
         for (Event next : el) {
             System.out.println(next.toString() + "\n");
