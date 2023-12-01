@@ -134,9 +134,9 @@ public class Reader {
         int gamesPlayed = jsonObject.getInt("Games played");
         boolean healthStatus = jsonObject.getBoolean("Health status");
         Player player = new Player(name, position, number, height, weight);
-        player.playGame(points, rebounds, assists, steal, blocks, gamesPlayed);
+        player.playGameNoLog(points, rebounds, assists, steal, blocks, gamesPlayed);
         player.isPlayerHealthy(healthStatus);
-        t.addPlayer(player);
+        t.addPlayerNoLog(player);
         t.addPlayerInjuryReserve();
     }
 }

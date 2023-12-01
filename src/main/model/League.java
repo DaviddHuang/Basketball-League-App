@@ -34,7 +34,7 @@ public class League implements Writable {
     // util package, HockeyTeam class, method: insert()
     public boolean addTeam(Team team) {
         for (Team t : league) {
-            if (t.getTeamName().equals(team.getTeamName())) {
+            if (t.getTeamName().equalsIgnoreCase(team.getTeamName())) {
                 return false;
             }
         }
@@ -46,7 +46,7 @@ public class League implements Writable {
 
     public boolean addTeamNoLog(Team team) {
         for (Team t : league) {
-            if (t.getTeamName().equals(team.getTeamName())) {
+            if (t.getTeamName().equalsIgnoreCase(team.getTeamName())) {
                 return false;
             }
         }

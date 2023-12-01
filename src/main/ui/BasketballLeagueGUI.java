@@ -444,8 +444,6 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener, Windo
         leagueMenu.revalidate();
     }
 
-
-
     // EFFECTS: adds each team as an object array stored in a list and returns it
     private ArrayList<Object[]> addTeamsToDisplay() {
         ArrayList<Object[]> data = new ArrayList<>();
@@ -551,7 +549,7 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener, Windo
                 int answer = JOptionPane.showConfirmDialog(null, "Team selected: "
                         + selectTeamName.getText()
                         + " has been selected!","title", JOptionPane.DEFAULT_OPTION);
-                EventLog.getInstance().logEvent(new Event("Team selected: " + t.getTeamName()));
+                t.selectTeamLogEvent();
                 if (answer == JOptionPane.OK_OPTION) {
                     selectTeam.setVisible(false);
                     playerMenu();
@@ -644,7 +642,13 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener, Windo
                 rosterModel.addRow(player);
             }
         }
+        displayPlayersHelper();
+    }
+
+    // EFFECTS: helper method for displayPlayers
+    private void displayPlayersHelper() {
         rosterPanel.setVisible(true);
+        team.displayRosterLogEvent();
         leagueMenu.add(rosterPanel);
         leagueMenu.repaint();
         leagueMenu.revalidate();
@@ -1111,6 +1115,12 @@ public class BasketballLeagueGUI extends JFrame implements ActionListener, Windo
                 injuryModel.addRow(player);
             }
         }
+        displayInjuryReserveHelper();
+    }
+
+    // EFFECTS: helper method for displayInjuryReserve
+    private void displayInjuryReserveHelper() {
+        team.displayInjuryReserveLogEvent();
         injuryPanel.setVisible(true);
         leagueMenu.add(injuryPanel);
         leagueMenu.repaint();

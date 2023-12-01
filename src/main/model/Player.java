@@ -94,6 +94,20 @@ public class Player implements Writable {
         this.steals += steals;
         this.blocks += blocks;
         this.gamesPlayed += gamesPlayed;
+        EventLog.getInstance().logEvent(new Event("Player stats updated: " + getName()));
+    }
+
+    // REQUIRES: points >= 0, rebounds >= 0, assists >= 0, gamesPlayed >= 0
+    // MODIFIES: this
+    // EFFECTS: adds points, rebounds, assists and gamesPlayed to their respective totals,
+    //           increase the number of games played
+    public void playGameNoLog(int points, int rebounds, int assists, int steals, int blocks, int gamesPlayed) {
+        this.points += points;
+        this.rebounds += rebounds;
+        this.assists += assists;
+        this.steals += steals;
+        this.blocks += blocks;
+        this.gamesPlayed += gamesPlayed;
     }
 
     // EFFECTS: returns the score used for calculating the MVP

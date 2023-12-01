@@ -44,8 +44,27 @@ public class Team implements Writable {
             }
         }
         roster.add(player);
+        EventLog.getInstance().logEvent(new Event("Player added to " + getTeamName() + ": "
+                + player.getName()));
         return true;
     }
+
+    // MODIFIES: this
+    // EFFECTS: adds a new player to the roster no log, if the player shares the same number as another player don't add
+    //          the player, return true if add is successful and return false otherwise
+    // Code referenced from: https://github.students.cs.ubc.ca/CPSC210/ControlAndDataFlowProjects.git Hockey team
+    // util package, HockeyTeam class, method: insert()
+    public Boolean addPlayerNoLog(Player player) {
+        for (Player p : roster) {
+            if (p.getJerseyNumber() == player.getJerseyNumber()) {
+                return false;
+            }
+        }
+        roster.add(player);
+        return true;
+    }
+
+
 
     // MODIFIES: this
     // EFFECTS: removes player with given name from roster or injury reserve and return true, otherwise return false
@@ -55,6 +74,8 @@ public class Team implements Writable {
         for (Player p : roster) {
             if (p.getName().equalsIgnoreCase(name)) {
                 roster.remove(p);
+                EventLog.getInstance().logEvent(new Event("Player removed from " + getTeamName() + ": "
+                        + p.getName()));
                 return true;
             }
         }
@@ -62,6 +83,8 @@ public class Team implements Writable {
             if (p.getName().equalsIgnoreCase(name)) {
                 injuryReserve.remove(p);
                 roster.remove(p);
+                EventLog.getInstance().logEvent(new Event("Player removed from " + getTeamName() + ": "
+                        + p.getName()));
                 return true;
             }
         }
@@ -136,6 +159,22 @@ public class Team implements Writable {
         return false;
     }
 
+    // EFFECTS: creates a new event log to select team in league
+    public void selectTeamLogEvent() {
+        EventLog.getInstance().logEvent(new Event("Team selected: " + getTeamName()));
+    }
+
+    // EFFECTS: creates a new event log to display team roster
+    public void displayRosterLogEvent() {
+        EventLog.getInstance().logEvent(new Event("Displaying " + getTeamName() + " roster"));
+    }
+
+    // EFFECTS: creates a new event log to display team injury reserve
+    public void displayInjuryReserveLogEvent() {
+        EventLog.getInstance().logEvent(new Event("Displaying " + getTeamName() + " injury reserve"));
+    }
+
+
     // EFFECTS: calculates the win percentage of a team
     public double winPercentage() {
         if (teamGamesPlayed == 0) {
@@ -152,6 +191,7 @@ public class Team implements Writable {
         this.wins += wins;
         this.losses += losses;
         this.teamGamesPlayed = this.wins + this.losses;
+        EventLog.getInstance().logEvent(new Event(getTeamName() + " record updated"));
     }
 
     // MODIFIES: this
