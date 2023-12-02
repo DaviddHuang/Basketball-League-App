@@ -58,6 +58,9 @@ public class Reader {
             addInjuryReserve(team, nextTeam);
             addScoringLeader(team, nextTeam);
             addDefensiveLeader(team, nextTeam);
+            l.calculateLeagueMostValuablePlayer();
+            l.calculateLeagueDefensivePlayer();
+            l.calculateLeagueWinner();
         }
     }
 

@@ -79,9 +79,11 @@ public class League implements Writable {
             Player mvp = league.get(0).getScoringLeader().get(0);
 
             for (Team t : league) {
+                if (t.getScoringLeader() == null || t.getScoringLeader().isEmpty()) {
+                    continue;
+                }
                 if (mvp.mvpScore() < t.getScoringLeader().get(0).mvpScore()) {
                     mvp = t.getScoringLeader().get(0);
-
                 }
             }
             leagueMostValuablePlayer.clear();
@@ -91,6 +93,7 @@ public class League implements Writable {
         return false;
     }
 
+
     // MODIFIES: this
     // EFFECTS: calculates the defensive leader from every team and adds them to the defensive player list, return true
     //          if successful else return false
@@ -99,6 +102,9 @@ public class League implements Writable {
             Player dpoy = league.get(0).getDefensiveLeader().get(0);
 
             for (Team t : league) {
+                if (t.getDefensiveLeader() == null || t.getDefensiveLeader().isEmpty()) {
+                    continue;
+                }
                 if (dpoy.dpoyScore() < t.getDefensiveLeader().get(0).dpoyScore()) {
                     dpoy = t.getDefensiveLeader().get(0);
 
