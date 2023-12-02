@@ -16,7 +16,7 @@ public class EventLog implements Iterable<Event> {
 
 
     // MODIFIES: this
-    // EFFECTS: gets instance of EventLog, creates it if it doesn't already exist and returns instance of EventLog
+    // EFFECTS: gets instance of EventLog, creates it if it doesn't already exist and returns instance of EventLog.
     public static EventLog getInstance() {
         if (theLog == null) {
             theLog = new EventLog();
