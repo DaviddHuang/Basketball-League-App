@@ -103,9 +103,3 @@ would create things such as league menu, team menu, and player menu. This made f
 fields which is evident in my GUI class. These are the biggest refactoring possibility present in my
 current design and would have greatly improved the cohesion in my design. By doing this refactoring, my design would
 follow the single responsibility principle.
-
-
-
-
-
-# Basketball-League-App
